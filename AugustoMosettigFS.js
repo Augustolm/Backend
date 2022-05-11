@@ -159,12 +159,14 @@ async function productosObj() {
     console.log('Traigo todos para validar que no se repita ningun id');
     console.log(await productos.getAll());
 
-    console.log('Vacio el archivo');
-    await productos.deleteAll();
+    // console.log('Vacio el archivo');
+    // await productos.deleteAll();
 
   } catch (error) {
     console.log("El error es: ", error);
   }
 }
 
-productosObj();
+//productosObj();
+
+module.exports = Contenedor;
