@@ -81,6 +81,9 @@ class Contenedor {
     }
   }
 
+
+
+
   async getAll() {
     try {
       await validarArchivo(this.fileName);
@@ -120,6 +123,7 @@ async function productosObj() {
       url: "",
       precio: 0,
     };
+
 
     objeto.titulo = "Producto1";
     objeto.thumbnail = "url pendiente";

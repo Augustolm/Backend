@@ -1,6 +1,6 @@
 const express = require('express')
 const moment = require('moment')
-const Contenedor = require('./AugustoMosettigFS')
+const Contenedor = require('../AugustoMosettigFS')
 
 const app = express();
 const PORT = 8080
