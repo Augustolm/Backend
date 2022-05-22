@@ -8,6 +8,7 @@ const { response } = require('express')
 const usuariosGet = (req, res = response)=> {
     
     const {q, nombre = 'sin nombre', apikey, page = 1 , limit = 30} = req.query
+    
 
     res.json({
         

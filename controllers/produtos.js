@@ -7,7 +7,6 @@ const Contenedor = require('../AugustoMosettigFS')
 const productos = new Contenedor("productos.txt")
 
 
-
 // const storage = multer.diskStorage({
 //     destination: './uploads',
     
@@ -20,31 +19,34 @@ const productos = new Contenedor("productos.txt")
 // let upload = multer({ storage: storage });
 // uploader = upload.single('uploaded_file')
 
-
-
 const productoPost = (req, res)=> {
+      
     const ejecutar = async () => {
-        //const guardado = req.body
-        const obj = req.body
-        const data = await productos.save(obj)
 
-       res.json(`se crea con exito el producto con el id = ${data}`)
-        console.log(data);
+        try {
+
+            a = req.body
+            let obj = {};
+        
+            obj.titulo = req.body.titulo;
+            obj.precio = req.body.precio;
+            obj.url = req.body.imagen;
+            let id = await productos.save(obj);
+        
+            res.send({ obj });
+      
+          } catch (error) {
+            throw new Error("Hubo un error al agregar el producto");
+          }
+
+        
     }
    ejecutar();
-
-// Ejemplo:
-// {
-//     "id": 0,
-//     "titulo": "Producto133",
-//     "url": "pendiente",
-//     "precio": 3000
-// }
-
 
 }
 
 const productosGet = (req, res = response)=> {
+    
     const ejecutar = async () => {
     const data = await productos.getAll()
         res.send(data)
@@ -69,19 +71,21 @@ const productosGetid = (req, res = response)=> {
 
 const productoPut = (req, res)=> {
     const ejecutar = async () => {
-        const {id} = req.params
-        let {titulo, url, precio} = req.body
-        let data = await productos.getById(id)
-        let nuevoObj = {
-            id: data.id,
-            titulo: titulo,
-            url: url,
-            precio: precio
-        }
-                
+        try {
+            let obj = {};
+            obj.id = parseInt(req.params.id);
+            obj.titulo = req.body.titulo;
+            obj.precio = req.body.precio;
+            obj.url = req.body.imagne;
         
-       res.send(`se realizaron los siguientes cambios ${JSON.stringify(nuevoObj)}`)
-       console.log(nuevoObj)
+            let id = await productos.updateById(obj);
+        
+            res.send(id);
+
+
+          } catch (error) {
+             throw new Error("Hubo un error al actualizar el producto");
+           }
     
     }      
    ejecutar();

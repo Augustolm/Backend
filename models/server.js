@@ -2,13 +2,6 @@ const express = require('express');
 const cors = require('cors');
 
 
-
-
-
-
-
-
-
 class Server {
 
     constructor() {
@@ -20,6 +13,7 @@ class Server {
 
         //Middlewares
         this.middlewares();
+        
 
         //Rutas de mi aplicacion
         this.routes();
@@ -31,7 +25,10 @@ class Server {
         this.app.use(cors())
 
 
-        //Lectura y escritura del body
+        //lectura del body
+        this.app.use(express.urlencoded({ extended: true }));
+
+        //Lectura y escritura del json
         this.app.use(express.json() );
 
 

@@ -82,6 +82,40 @@ class Contenedor {
   }
 
 
+  async updateById(obj) {
+
+    try {
+    
+      await validarArchivo(this.fileName);
+      let array = await crearArray(this.fileName);
+      const consulta = array.some(array => array.id == obj.id)
+      
+      const arrayid = -1 + obj.id
+        if (consulta === false) {
+        return { error: "producto no encontrado" };
+      }
+        else {
+          console.log('datos del bobjeto', obj);
+ 
+          array.splice(arrayid, 1, {
+            id: obj.id,
+            titulo: obj.titulo,
+            url: obj.url,
+            precio: obj.precio
+          })
+         
+          console.log(array);
+          await escribirArchivo(this.fileName, array);
+
+          return { estado: "Producto actualizado" };
+        }
+        
+    } catch (error) {
+      throw error;
+    }
+
+
+  }
 
 
   async getAll() {

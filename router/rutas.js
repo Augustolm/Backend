@@ -1,4 +1,5 @@
 
+const express = require("express");
 const { Router } = require('express');
 const { productosGet, productoPut, productoPost, productoDelete, productoPatch, productosGetid } = require('../controllers/produtos');
 const { usuariosGet, usuarioPut, usuarioPost, usuarioDelete, usuarioPatch} = require('../controllers/usuarios');
@@ -6,9 +7,9 @@ const { usuariosGet, usuarioPut, usuarioPost, usuarioDelete, usuarioPatch} = req
 
 
 
-
 const router = Router();
-
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 // router.get('/', usuariosGet) 
 // router.put('/:id', usuarioPut) 
