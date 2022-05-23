@@ -10,6 +10,8 @@ class Server {
         this.port = process.env.PORT
         this.usuariosPath = '/api/usuarios'
         this.productosPath = '/api/productos'
+        this.pugPatch = '/api/pug'
+        this.ejsPatch = '/api/ejs'
 
         //Middlewares
         this.middlewares();
@@ -34,12 +36,20 @@ class Server {
 
         //directorio public
         this.app.use( express.static('public') )
+
+        //views
+        this.app.set('views', './views');
+        //this.app.set('view engine', 'pug')
+        this.app.set('view engine', 'ejs')
     }
+    
 
     routes() {
         
-        this.app.use(this.usuariosPath , require('../router/rutas'));
+        //this.app.use(this.usuariosPath , require('../router/rutas'));
         this.app.use(this.productosPath , require('../router/rutas'));
+        this.app.use(this.pugPatch, require('../router/rutas'))
+        this.app.use(this.ejsPatch, require('../router/rutas'))
     
        
     }

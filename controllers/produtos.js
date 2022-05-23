@@ -25,7 +25,7 @@ const productoPost = (req, res)=> {
 
         try {
 
-            a = req.body
+            //a = req.body
             let obj = {};
         
             obj.titulo = req.body.titulo;
