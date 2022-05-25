@@ -6,20 +6,6 @@ const productos = new Contenedor("productos.txt")
 
 
 
-const holaejs = (req, res = response)=> {
-    
-        res.render('views/datos', {mensaje: 'este es un mensaje de bienvenida Gatoooooo'})
-    
-
-}
-
-const  datosEjs = (req, res = response) => {
-
-    const {min, nivel, max, titulo} = req.query
-
-    res.render('views/datos', {min, nivel, max, titulo});
-}
-
 
 const formularioEjs = (req, res= response) => {
     const ejecutar = async () => {
@@ -63,8 +49,6 @@ const personasEjs = (req, res= response) => {
 
 
 module.exports = {
-    holaejs,
-    datosEjs,
     formularioEjs,
     personasEjs,
     listaEjs

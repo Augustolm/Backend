@@ -4,7 +4,7 @@ const { Router } = require('express');
 const { productosGet, productoPut, productoPost, productoDelete, productoPatch, productosGetid } = require('../controllers/produtos');
 const { usuariosGet, usuarioPut, usuarioPost, usuarioDelete, usuarioPatch} = require('../controllers/usuarios');
 const {holaPug, datosPug} = require('../controllers/pug');
-const { holaejs, datosEjs, formularioEjs, personasEjs, listaEjs } = require("../controllers/ejs");
+const { formularioEjs, personasEjs, listaEjs } = require("../controllers/ejs");
 
 
 
@@ -22,16 +22,14 @@ router.use(express.urlencoded({ extended: true }));
 // router.patch('/', usuarioPatch) 
 
 //EJS
-
-router.get('/', holaejs)
-router.get('/datos', datosEjs)
+//http://localhost:8080/api/ejs/formulario
 router.get('/formulario', formularioEjs)
 router.post('/personas', personasEjs)
 router.get('/lista', listaEjs)
 
-//pug
-router.get('/', holaPug)
-router.get('/datos', datosPug)
+// //pug
+// router.get('/', holaPug)
+// router.get('/datos', datosPug)
 
 //producto
 router.get('/', productosGet) //punto 1
