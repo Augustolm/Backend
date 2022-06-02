@@ -1,0 +1,50 @@
+    <h1>Agregar Producto</h1> 
+
+
+        <div class="formularioProducto">
+              <form onsubmit="return enviarProducto()">
+                <input type="text" name="titulo" placeholder="Nombre del Producto"/>
+                <input type="text" name="imagen"placeholder="url"/>
+                <input type="number" name="precio"placeholder="precio"/>
+                <button type="submit">Cargar Producto</button>
+                </form>
+        </div>     
+
+            <hr/>
+            {{#if existe}}
+            <table>
+                <thead>
+                    <th>Id</th>
+                    <th>Nombre del producto</th>
+                    <th>Precio</th>
+                    <th>Url</th>
+                </thead>
+                <tbody>
+                    
+                      {{#each informacionProducto}}
+                        <tr>
+                            <td>{{this.id}}</td>
+                            <td>{{this.titulo}}</td>
+                            <td>{{this.precio}}</td>
+                            <td><img src={{this.url}}></td>
+                        </tr>
+                        
+                    {{/each}}
+                  
+                </tbody>
+            </table>
+            {{else}}
+
+            <h1>No existen datos</h1>
+            {{/if}}
+            <hr>
+            <h2>Chat  </h2>
+            <div>
+                 <div id="messages"></div>
+                    <form onsubmit="return enviarMensaje()">
+                    <input type="text" id="author" placeholder="Correo Electronico" required/>
+                    <input type="text" id="text" placeholder="Mensaje"/>
+                    <button type="submit">Enviar mensaje</button>
+                    </form>
+            </div>
+           
