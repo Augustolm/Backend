@@ -27,6 +27,9 @@ const productos = new Contenedor("productos.txt")
 
 
 
+
+
+
 // const ejecutar2 = async () => {
 //     const messages = await Logs.getAll()
 //     console.log('esta es la respeusta que esperamos',await Logs.getAll());
@@ -42,9 +45,6 @@ console.log(tiempo);
 
 socketServer.on('connection', (socket) => {
     socket.emit('messages', messages);
-    
-
-
     socket.on('new_message', ({mensaje}) => {
 
       let { author, text } = mensaje;
@@ -54,27 +54,34 @@ socketServer.on('connection', (socket) => {
       messages.push(objTemp);
       
       socketServer.sockets.emit('messages', messages);
-      console.log('este es mensaje de socketon',messages);
+      //console.log('este es mensaje de socketon',messages);
 
       const ejecutar = async () => {
         await Logs.saveLog(messages)
       }
       ejecutar();
-    
-    });
+});
 
-    socket.on('nuevoProducto', (producto) => {
+     socket.on('nuevoProducto', (producto)  => {
       console.log(producto);
 
-      console.log(`guardar: ${producto}`);
-      save(producto);
-      socketServer.sockets.emit('producto', getAll());
       
+      
+      const ejecutar = async () => {
+        productos.save(producto);
+        const data = await productos.getAll()
+                
+          socketServer.sockets.emit('producto', data);
+       
+               console.log(data);
+            }
+
+
+                ejecutar();   
+   
+        })
     
-    })
-    
-    
-  });
+      });
 
 
 app.engine('handlebars', engine({
@@ -89,43 +96,20 @@ app.set('view engine', 'handlebars')
 //roting
 
 app.get('/', (req, res) => {
-    const ejecutar = async () => {
-    const data = await productos.getAll()
-            if(data.length)
-            existe = true
-            else
-            existe = false
-            // console.log(data);
-            res.render('index', {
-                informacionProducto: data,
-                existe: existe
-            })
-        }
-            ejecutar();    
+  const ejecutar = async () => {
+        const data = await productos.getAll()
+                if(data.length)
+                existe = true
+                else
+                existe = false
+                // console.log(data);
+                res.render('index', {
+                    informacionProducto: data,
+                    existe: existe
+                })
+            }
+                ejecutar();    
 })
-
-
-app.post('/', (req, res) => {
-
-  
-    let obj = {};
-           
-    obj.titulo = req.body.titulo;
-    obj.precio = req.body.precio;
-    obj.url = req.body.imagen;
-    let id = productos.save(obj);
-
-    
-    console.log(id);
-    
-    //personas.push({titulo, precio, url})
-    res.redirect('/')
-
-
-})
-
-
-
 
 
   httpServer.listen(8080, () => {

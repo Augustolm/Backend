@@ -64,8 +64,4 @@ class ContenedorLogs {
       }
 }
 
-
-
-
-
 module.exports = ContenedorLogs;
