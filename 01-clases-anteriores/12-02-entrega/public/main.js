@@ -1,3 +1,9 @@
+fetch('/')
+.then(response => response.text())
+.then(template => {
+  
+  const hbsTemplate = Handlebars.compile(template);
+
 const socket = io();
 
 const enviarMensaje = () => {
@@ -71,8 +77,8 @@ const agregarProductos = (producto) => {
   
   
   const productos2 = producto.map(producto => crearEtiquetasProductos(producto)).join(" ");
-  const productosFinal = headtable.concat(productos2,foottable);
- 
+  
+  const productosFinal = headtable.concat(productos2,foottable, hbsTemplate);
   document.getElementById("products").innerHTML = productosFinal;
 }
 
@@ -80,3 +86,4 @@ const agregarProductos = (producto) => {
 
 socket.on('messages', (messages) => agregarMensajes(messages));
 socket.on('producto', (producto) => agregarProductos(producto))
+})
