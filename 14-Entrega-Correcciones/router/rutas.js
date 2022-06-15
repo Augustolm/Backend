@@ -2,7 +2,7 @@
 const { Router } = require('express');
 const { productosGet, productoPut, productoPost, productoDelete, productoPatch, productosGetid } = require('../controllers/produtos');
 const { usuariosGet, usuarioPut, usuarioPost, usuarioDelete, usuarioPatch} = require('../controllers/usuarios');
-const { carritoGet, carritoDelete , carritoGetProductos, carritoPost, carritoDeleteProducto} = require('../controllers/carrito')
+const { carritoGet, carritoDelete , carritoGetProductos, carritoPost, carritoDeleteProducto, carritoNew} = require('../controllers/carrito')
 
 async function getUser() {
     return{
@@ -29,20 +29,21 @@ const router = Router();
 // router.patch('/', usuarioPatch) 
 
 //carrito
-router.get('/', carritoGet)
-router.get('/:id/productos', carritoGetProductos)
-router.post('/:id/productos', carritoPost)
-router.delete('/:id', carritoDelete)
-router.delete('/:id/productos/:id_prod',carritoDeleteProducto)
+router.get('/carrito/:id', carritoGet)
+router.get('/carrito/:id/productos', carritoGetProductos)
+router.post('/carrito', carritoNew)
+router.post('/carrito/:id/productos', carritoPost)
+router.delete('/carrito/:id', carritoDelete)
+router.delete('/carrito/:id/productos/:id_prod',carritoDeleteProducto)
 
 
 
 //producto
-router.get('/', productosGet) //punto 1
-router.get('/:id', productosGetid)
-router.put('/:id',rolPermisos, productoPut)
-router.post('/',rolPermisos, productoPost)
-router.delete('/:id',rolPermisos, productoDelete)
-router.patch('/', productoPatch)
+router.get('/productos/', productosGet) //punto 1
+router.get('/productos/:id', productosGetid)
+router.put('/productos/:id',rolPermisos, productoPut)
+router.post('/productos/',rolPermisos, productoPost)
+router.delete('/productos/:id',rolPermisos, productoDelete)
+router.patch('/productos/', productoPatch)
 
 module.exports = router;

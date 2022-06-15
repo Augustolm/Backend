@@ -1,15 +1,29 @@
 const { response } = require('express')
-
+const Contenedor = require('../AugustoMosettigFS')
 const Carrito = require('../carritoFs')
+
+
 const carrito1 = new Carrito('./carrito.txt');
+const producto1 = new Contenedor('./productos.txt')
+
+
+
+const carritoNew = ( req, res =response) => {
+    const ejecutar = async () => {
+        let newCarrito = await carrito1.createCarrito()
+        res.send(newCarrito)
+    }
+    ejecutar();
+}
 
 
 const carritoGet = (req, res = response)=> {
     
     const ejecutar = async () => {
    
-        let newCarrito = await carrito1.createCarrito();
-        res.send(newCarrito);
+        let id = req.params.id;
+        let carrito = await carrito1.getById(parseInt(id));
+        res.send(carrito);
 
     }
     ejecutar()
@@ -48,13 +62,25 @@ const carritoPost = (req, res=response) => {
 
     ejecutar = async() => {
         let id = req.params.id;
-        let body = req.params.body
-        console.log(body);
-        let carrito = await carrito1.saveProductInCart(parseInt(id),body);
-        res.send(carrito);
+        console.log(id);
+        let productos = req.body.id
+       
+        console.log(productos);
+        // let carrito = await carrito1.saveProductInCart(parseInt(id),body);
+        // res.send(carrito);
+        console.log('esto es productos',productos.id);
+        let findProduct = await producto1.getById(productos);
+        console.log(findProduct);
+        await carrito1.saveProductInCart(parseInt(id),findProduct)
+
+        res.send('Producto Agregado al Carrito')
+
 
     }
+    ejecutar();
 }
+
+
 
 
 const carritoDeleteProducto = (req, res= response) => {
@@ -67,6 +93,7 @@ const carritoDeleteProducto = (req, res= response) => {
         res.send('Producto eliminado');
 
     }
+    ejecutar();
 }
 
 
@@ -80,5 +107,6 @@ module.exports = {
     carritoDelete,
     carritoGetProductos,
     carritoPost,
-    carritoDeleteProducto
+    carritoDeleteProducto,
+    carritoNew
 }

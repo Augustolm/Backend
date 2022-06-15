@@ -91,7 +91,29 @@ class Carrito {
           } else {
               console.log('Carrito eliminado');
           }
+          return carritos
       })
 }
+
+    async deleteProdInCart(id,product) {
+        let contenido = await fs.promises.readFile(this.archivo, 'utf-8')
+        let carritos = JSON.parse(contenido);
+        let carritoElegido = carritos.find(cart => cart.id == id);
+        let arraySinElPorudcto = await carritoElegido.productos.filter(prod => prod.id != product);
+        carritoElegido.productos = arraySinElPorudcto;
+        fs.writeFile(this.archivo,JSON.stringify(carritos),(err) => {
+            if(err)
+                console.log('Hubo un error al eliminar el producto');
+            else{
+                console.log('Producto Eliminado');
+            }
+            })
+    
+
+    }
+
+
+
+
 }
 module.exports = Carrito;

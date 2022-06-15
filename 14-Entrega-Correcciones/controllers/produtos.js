@@ -87,7 +87,7 @@ const productoPut = (req, res, next)=> {
             obj.id = parseInt(req.params.id);
             obj.titulo = req.body.titulo;
             obj.precio = req.body.precio;
-            obj.url = req.body.imagne;
+            obj.url = req.body.url;
         
             let id = await productos.updateById(obj);
         

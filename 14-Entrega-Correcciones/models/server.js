@@ -12,9 +12,9 @@ class Server {
    
         this.app = express();
         this.port = process.env.PORT
-        this.usuariosPath = '/api/usuarios'
-        this.productosPath = '/api/productos'
-        this.carritoPath = '/api/carrito'
+        //this.usuariosPath = '/api/usuarios'
+        this.productosPath = '/api'
+        this.carritoPath = '/api'
     
 
         //Middlewares
