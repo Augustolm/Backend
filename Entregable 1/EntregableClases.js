@@ -1,60 +1,103 @@
+const isRequired = function (nombre) {
+    throw new Error(`${nombre} es un campo requerido`)
+};
 
-class Usuario {
-    constructor(nombre = '', apellido = '', libros = {}, mascotas = []) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.libros = libros;
-        this.mascotas = mascotas;
+class ProductManager {
+    constructor(producto = []) {
+        this.producto = producto;
     }
 
-    getFullName() {
-        console.info(`El nombre del Usuario es: ${this.nombre} y su apellido es: ${this.apellido}`);
-        return `${this.nombre} ${this.apellido}`;
-    }
-
-    addMascotas(nombreDeMascota) {
-        this.mascotas = [...this.mascotas, nombreDeMascota]
-        console.info(this.mascotas);
-    }
-
-    countMascotas() {
-        const count = this.mascotas.length;
-        console.info(`La cantidad de mascotas es: ${count}`);
-        return count;
-    }
-    addBook(titulo = String, author = String) {
-        const nuevoLibro = {
-            nombre: titulo,
-            author: author
+    idValidator = () => {
+        const count = this.producto.length;
+       // (count > 0) ? code = this.producto[count - 1].code + 1 :  1;
+        if(count > 0) {
+            return this.producto[count - 1].id + 1
+        } else {
+           return 1;
         }
-        this.libros.push(nuevoLibro);
-        console.info(`Se ingreso exitosmanete el libro: ${titulo} del author: ${author}`);
+    }
+     codeValidator = (code) => {
+        try {
+         const valodateCode = this.producto.find((producto) => producto.code === code);
+            return valodateCode
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    getBookNames() {
-        const nombreLibro = this.libros.map((n) => n.nombre);
-        if(nombreLibro.length <= 1) {
-            console.info(`El libro es: ${nombreLibro}`);
-        }else console.info(`Los libros son: ${nombreLibro}`)            
-        }
+    async addProduct(
+        {
+         title = isRequired('title'),
+         description = isRequired('description'),
+         price = isRequired('price'),
+         thumbnail = isRequired('thumbnail'),
+         code= isRequired('code'),
+         stock= isRequired('stock'),
+        })  {
+        try {
+           
+            if(await this.codeValidator(code)) {
+                throw new Error('El code ya existe')
+            }
 
+           const id = await this.idValidator();
+            const productos = {
+                id,
+                title,
+                description,
+                price,
+                thumbnail,
+                code,
+                stock,
+            }
+           const guardarProducto = this.producto.push(productos);
+            return this.producto
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getProductById(id) {
+        try {
+            const producto = this.producto.find((producto) => producto.id === id);
+            if(producto === undefined) {
+                throw new Error('El producto no existe')
+            }
+            return producto
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
-    
-const Augusto = new Usuario ('Augusto', 'Mosettig', [{nombre: 'Fausto', autor:  'Johann Wolfgang von Goethe'}] , ['perro', 'gato']) 
-
-console.info(Augusto);
-
-Augusto.getFullName();
-Augusto.addMascotas('pez');
-Augusto.countMascotas()
-Augusto.addBook('Don Quijote de la Mancha', 'Miguel de Cervantes')
-Augusto.addBook('Los cuentos de Canterbury', 'Geoffrey Chaucer')
-Augusto.addBook('Relatos cortos', 'Antón Chéjov')
-Augusto.getBookNames()
 
 
-// const Pedro = new Usuario ('Pedro', 'Perez', [{nombre: 'Decamerón', author: 'Giovanni Boccaccio'}], ['pez','iguana'])
+async function main() {
+    try {
+        const obj = {
+            title: 'Producto 1',
+            description: 'Descripción del producto 1',
+            price: 100,
+            thumbnail: 'urlfaltante',
+            code: 'akjshbfalksjbfg55454',
+            stock: 10,
+        }
+        const obj2 = {
+            title: 'Producto 2',
+            description: 'Descripción del producto 2',
+            price: 88,
+            thumbnail: 'urlfaltante',
+            code: 'akjshbfalksjbfg55452',
+            stock: 5,
+        }
 
-// Pedro.countMascotas()
-// Pedro.getBookNames()
-// Pedro.getFullName()
+        productos = new ProductManager();
+        console.log(await productos.addProduct(obj))
+        console.log(await productos.addProduct(obj2))
+        console.log(await productos.getProductById(1))
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+main()
