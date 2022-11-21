@@ -7,7 +7,7 @@ class ProductManager {
         this.producto = producto;
     }
 
-    idValidator = () => {
+    idCount = () => {
         const count = this.producto.length;
        // (count > 0) ? code = this.producto[count - 1].code + 1 :  1;
         if(count > 0) {
@@ -18,7 +18,7 @@ class ProductManager {
     }
      codeValidator = (code) => {
         try {
-         const valodateCode = this.producto.find((producto) => producto.code === code);
+         const valodateCode = this.producto.some((producto) => producto.code === code);
             return valodateCode
         } catch (error) {
             console.log(error)
@@ -35,12 +35,11 @@ class ProductManager {
          stock= isRequired('stock'),
         })  {
         try {
-           
-            if(await this.codeValidator(code)) {
-                throw new Error('El code ya existe')
+            if(this.codeValidator(code)) {
+                throw new Error('El codigo ya existe')
             }
 
-           const id = await this.idValidator();
+           const id = await this.idCount();
             const productos = {
                 id,
                 title,
@@ -86,7 +85,7 @@ async function main() {
             description: 'Descripción del producto 2',
             price: 88,
             thumbnail: 'urlfaltante',
-            code: 'akjshbfalksjbfg55452',
+            code: 'akjshbfalksjbfg55453',
             stock: 5,
         }
 
