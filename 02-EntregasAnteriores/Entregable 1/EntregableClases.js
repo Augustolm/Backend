@@ -92,7 +92,7 @@ async function main() {
         productos = new ProductManager();
         console.log(await productos.addProduct(obj))
         console.log(await productos.addProduct(obj2))
-        console.log(await productos.getProductById(1))
+        console.log(await productos.getProductById(2))
 
     } catch (error) {
         console.log(error)
