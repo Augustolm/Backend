@@ -147,6 +147,31 @@ class Contenedor {
         }
     }
 
+    
+    /**
+     * Busca coincidencias mediante el findIndex y remplaza el objeto por el nuevo
+     * @returns Devuelve el objeto actualizado
+     */
+     async updateById(obj) {
+        
+        try {
+            console.log('Aca llega')
+            await fileChecker(this.fileName);
+            let array = await fileToArray(this.fileName);
+            let index = array?.findIndex((x) => x.id === obj.id);
+            console.log(index)
+            if (index === -1) throw new Error("No se encontro el objeto")
+            else {
+                array[index] = obj;
+                await arrayToFile(this.fileName, array);
+                return obj;
+            }
+        } catch (error) {
+            throw error;
+
+      }
+    }
+
     /**
      * Borra el objeto con le id seleccionado en el archivo
      * @param {int} id 
@@ -185,6 +210,12 @@ async function main() {
             id: 0,
         };
 
+        let objeto2 = {
+            title: "Producto Actualizado",
+            price: 33.23,
+            thumbnail: "UrlActualizada",
+            id: 3,
+        };
 
         objeto.title = "NombreProducto";
         objeto.price = 3659.99;
@@ -221,6 +252,9 @@ async function main() {
 
         // console.log('Traer todo');
         // console.log(await productos.getAll());
+
+        //console.log('Actualizo el id 3')
+        //console.log(await productos.updateById(objeto2));
 
         // console.log('Borro el elemento con el ID 3');
         // await productos.deleteById(3);
