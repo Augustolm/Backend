@@ -115,7 +115,7 @@ class Contenedor {
 
     /**
      * Selecciona un objeto del archivo y lo devuleve
-     * @param {int} id 
+     * @param {number} id
      * @returns Devuelve el objeto si lo encuentra
      */
     async getById(id) {
@@ -155,11 +155,9 @@ class Contenedor {
      async updateById(obj) {
         
         try {
-            console.log('Aca llega')
             await fileChecker(this.fileName);
             let array = await fileToArray(this.fileName);
             let index = array?.findIndex((x) => x.id === obj.id);
-            console.log(index)
             if (index === -1) throw new Error("No se encontro el objeto")
             else {
                 array[index] = obj;
@@ -235,7 +233,7 @@ async function main() {
         // console.log(await productos.save(objeto));
         // console.log(await productos.save(objeto));
         // console.log(await productos.save(objeto));
-        //console.log(await productos.save(objeto));
+        // console.log(await productos.save(objeto));
 
         //  console.log('Traigo el elemento con id 5');
 
