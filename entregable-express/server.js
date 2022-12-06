@@ -27,10 +27,8 @@ app.get('/', async(req, res) => {
 
 app.get('/:pid', async(req, res) => {
     try {
-        console.log('estoy en id')
         const { pid } = req.params;
-        console.log(id)
-        const data = await productos.getById(Number(id))
+        const data = await productos.getById(Number(pid))
         res.status(200).send(data)
     } catch (error) {
         console.log(error)
