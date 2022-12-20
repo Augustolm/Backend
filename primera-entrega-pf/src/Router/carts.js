@@ -1,15 +1,17 @@
 import { Router } from "express";
-//import {} from "../controller/carts.js";
+import { cartsGetid, cartsPost, getCarts, newCarts } from "../controller/carts.js";
+
 
 
 const routerCarts = Router();
 
 
 
-//routerCarts.get("/:cid", cartsID);
-//routerCarts.post("/:cid/product/:pid", cartsPost);
-//routerCarts.put("/", cartsPut);
-//routerCarts.delete("/:id", cartsDelete);
+routerCarts.post("/", newCarts);
+routerCarts.get("/:cid", cartsGetid);
+routerCarts.get("/", getCarts);
+routerCarts.post("/:cid/product/:pid", cartsPost);
+
 
 
 export default routerCarts;
