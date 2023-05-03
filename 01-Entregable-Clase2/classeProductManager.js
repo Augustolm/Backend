@@ -1,15 +1,5 @@
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var validationObj = function (obj) {
+"use strict";
+const validationObj = (obj) => {
     if (!obj.title || obj.title === "") {
         throw new Error("El titulo no puede estar vacio");
     }
@@ -29,15 +19,14 @@ var validationObj = function (obj) {
         throw new Error("El stock no puede ser 0");
     }
 };
-var ProductManager = /** @class */ (function () {
-    function ProductManager(producto) {
-        var _this = this;
+class ProductManager {
+    constructor(producto) {
         this.producto = [];
-        this.addProduct = function (obj) {
-            var idCount = function () {
-                var count = _this.producto.length;
+        this.addProduct = (obj) => {
+            const idCount = () => {
+                const count = this.producto.length;
                 if (count > 0) {
-                    var lastProduct = _this.producto[count - 1];
+                    const lastProduct = this.producto[count - 1];
                     if (lastProduct && lastProduct.id) {
                         return lastProduct.id + 1;
                     }
@@ -45,24 +34,24 @@ var ProductManager = /** @class */ (function () {
                 return 1;
             };
             validationObj(obj);
-            if (_this.producto.some(function (producto) { return producto.code === obj.code; })) {
+            if (this.producto.some((producto) => producto.code === obj.code)) {
                 throw new Error("El codigo ya existe");
             }
-            var id = idCount();
-            var productos = __assign(__assign({}, obj), { id: id });
-            _this.producto.push(productos);
+            const id = idCount();
+            const productos = Object.assign(Object.assign({}, obj), { id });
+            this.producto.push(productos);
             console.log("Producto agregado", productos);
         };
-        this.getProduct = function () {
-            console.log("Todos los productos actuales: ", _this.producto);
+        this.getProduct = () => {
+            console.log("Todos los productos actuales: ", this.producto);
         };
-        this.getProductById = function (id) {
+        this.getProductById = (id) => {
             //En caso de no coincidir ningún id, mostrar en consola un error “Not found”
             if (!id) {
                 console.log("Not found");
                 return;
             }
-            var product = _this.producto.find(function (product) { return product.id === id; });
+            const product = this.producto.find((product) => product.id === id);
             if (product) {
                 console.log("Producto encontrado: ", product);
             }
@@ -72,11 +61,10 @@ var ProductManager = /** @class */ (function () {
         };
         this.producto = producto;
     }
-    return ProductManager;
-}());
+}
 // crear pruebas
-var productManager = new ProductManager([]);
-productManager.addProduct({
+const products = new ProductManager([]);
+products.addProduct({
     title: "Producto 1",
     description: "Descripcion 1",
     price: 100,
@@ -84,7 +72,7 @@ productManager.addProduct({
     code: "Codigo 1",
     stock: 10,
 });
-productManager.addProduct({
+products.addProduct({
     title: "Producto 2",
     description: "Descripcion 2",
     price: 200,
@@ -92,7 +80,7 @@ productManager.addProduct({
     code: "Codigo 2",
     stock: 20,
 });
-productManager.getProduct(); //todo
-productManager.getProductById(); // Error
-productManager.getProductById(1); //solo el 1
-productManager.getProductById(2); //solo el 2
+products.getProduct(); //todo
+products.getProductById(); // Error
+products.getProductById(1); //solo el 1
+products.getProductById(2); //solo el 2

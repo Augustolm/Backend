@@ -88,9 +88,9 @@ class ProductManager implements ProductClass {
 
 // crear pruebas
 
-const productManager = new ProductManager([]);
+const products = new ProductManager([]);
 
-productManager.addProduct({
+products.addProduct({
   title: "Producto 1",
   description: "Descripcion 1",
   price: 100,
@@ -99,7 +99,7 @@ productManager.addProduct({
   stock: 10,
 });
 
-productManager.addProduct({
+products.addProduct({
   title: "Producto 2",
   description: "Descripcion 2",
   price: 200,
@@ -108,7 +108,7 @@ productManager.addProduct({
   stock: 20,
 });
 
-productManager.getProduct(); //todo
-productManager.getProductById(); // Error
-productManager.getProductById(1); //solo el 1
-productManager.getProductById(2); //solo el 2
+products.getProduct(); //todo
+products.getProductById(); // Error
+products.getProductById(1); //solo el 1
+products.getProductById(2); //solo el 2
