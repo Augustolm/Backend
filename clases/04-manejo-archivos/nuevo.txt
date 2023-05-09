@@ -1,0 +1,7 @@
+{
+  "nombre": "Adrian",
+  "edad": 29,
+  "casado": false,
+  "sueldo": 11.2,
+  "estado": "BN"
+}
