@@ -1,4 +1,5 @@
-const fs = require("fs");
+import fs from "fs";
+
 
 /**
  * Lee un array de objetos dentro de un archivo, retorna un array de objetos json
@@ -219,13 +220,14 @@ async function main() {
         objeto.price = 3659.99;
         objeto.thumbnail = "http://URI";
 
+        const phat = "./productos.json";
 
-        productos = new Contenedor("productos.txt");
+        const productos = new Contenedor(phat);
 
         //console.log('Llamo a save 10 veces');
 
-        // console.log(await productos.save(objeto));
-        // console.log(await productos.save(objeto));
+        console.log(await productos.save(objeto));
+        console.log(await productos.save(objeto));
         // console.log(await productos.save(objeto));
         // console.log(await productos.save(objeto));
         // console.log(await productos.save(objeto));
@@ -273,4 +275,3 @@ async function main() {
 main();
 
 
-module.exports = Contenedor;
