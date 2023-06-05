@@ -1,19 +1,33 @@
 
 import express from 'express';
 import { engine } from 'express-handlebars';
-import moment from 'moment';
 import { createServer as createHttpServer } from 'http';
 import { Server as SocketServer } from 'socket.io';
 import routerProduct from './Router/productos.js';
 import ProductManager from './api/ProductManager.js';
+import path, {dirname} from 'path';
+
+import { fileURLToPath } from 'url';
+
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
+
+export default __dirname;
+
+
 
 const app = express();
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json() );
 
 const httpServer = createHttpServer(app);
 const socketServer = new SocketServer(httpServer);
+
 
 //Productos
 const productos = new ProductManager("productos.txt");
@@ -25,9 +39,10 @@ app.use('', routerProduct);
 app.engine('handlebars', engine({
   extname: "handlebars",
   defaultLayout: "main",
-  layoutsDir: "public",
-}))
-app.set('view engine', 'handlebars')
+  layoutsDir: path.join(__dirname, 'public'),
+}));
+app.set('view engine', 'handlebars');
+
 
 
 
