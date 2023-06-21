@@ -1,10 +1,4 @@
 import { Router } from 'express';
-
-
-
-
-
-import {fileURLToPath} from 'url';
 import __dirname from '../server.js';
 import ProductManager from '../daos/mongodb/ProductManager.class.js';
 
@@ -28,5 +22,13 @@ routerProduct.get('/realtimeproducts', async (req, res) => {
   });
 
 
+  routerProduct.get('/tienda', async (req, res) => {  
+    res.render(__dirname + '/views/tienda', {});
+  });
+
+
+  routerProduct.get('/chat', async (req, res) => {  
+    res.render(__dirname + '/views/chat', {});
+  });
 
 export default routerProduct;

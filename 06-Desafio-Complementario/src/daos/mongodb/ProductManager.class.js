@@ -17,6 +17,7 @@ export default class ProductManager {
 
       try {
         let result = await productoModel.create(product);
+        console.log("pase por aca y guarde", result)
         return result;
       } catch (error) {
         console.log("Error al cargar los productos",error)
@@ -26,10 +27,8 @@ export default class ProductManager {
  
 
     async getProducts(){
-        console.log("pase por aca")
        try {
         let result = await productoModel.find();
-        console.log("pase por aca", result)
         return result ? result : [];
        } catch (error) {
         console.log("Error al cargar los productos",error);
