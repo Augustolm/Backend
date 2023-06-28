@@ -18,7 +18,6 @@ export default class ProductManager {
 
       try {
         let result = await productoModel.create(product);
-        console.log("pase por aca y guarde", result)
         return result;
       } catch (error) {
         console.log("Error al cargar los productos",error)
@@ -27,14 +26,16 @@ export default class ProductManager {
     }
  
 
-    async getProducts(){
-       try {
-        let result = await productoModel.find();
-        return result ? result : [];
-       } catch (error) {
-        console.log("Error al cargar los productos",error);
-       }
-    }
+    async getProducts(options) {
+        try {
+          const result = await productoModel.paginate({}, options);
+          return result;
+        } catch (error) {
+          console.log("Error al cargar los productos", error);
+          throw new Error('Error al obtener los productos');
+        }
+      }
+      
 
 
     async getProductById(id){

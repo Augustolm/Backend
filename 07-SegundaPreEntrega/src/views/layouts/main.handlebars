@@ -10,7 +10,29 @@
     <title>Segunda Entrega</title>
 </head>
 <body>
+  <div class="empresa">
+    Nombre de la Empresa
+    <button class="carrito">Carrito</button>
+  </div>
+  <div class="linea"></div>
+  <div class="menu">
+    <select name="categoria">
+      <option value="todo">Todo</option>
+      <option value="luminaria">luminaria</option>
+      <option value="perifericos">perifericos</option>
+    </select>
+    <select name="orden">
+        <option value="0">ordenar</option>
+      <option value="1">Ascendente</option>
+      <option value="-1">Descendente</option>
+    </select>
+    <select name="pendiente">
+      <option value="pendiente1">Pendiente 1</option>
+      <option value="pendiente2">Pendiente 2</option>
+      <option value="pendiente3">Pendiente 3</option>
+    </select>
+  </div>
     {{{ body }}}
-    <script src="./main.js"></script>
+    <script src="./main.js" type="module"></script>
 </body>
 </html>
