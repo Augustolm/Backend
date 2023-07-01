@@ -17,23 +17,36 @@ routerProduct.get('/', async (req, res) => {
 try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
+    const filters = {};
+
+    
+
 
  const options = {
     page,
     limit,
     ...(req.query.select && { select: req.query.select }),
-    ...(req.query.populate && { populate: req.query.populate })
+
   };
-
-
 
   if (req.query.sort && req.query.sort !== '0') {
     options.sort = { price: req.query.sort }; 
-}
+  }
 
-  const data = await product.getProducts(options);
+  if(req.query.categoria && req.query.categoria !== '0') {
+    filters.category = req.query.categoria;
+  }
 
-     const formattedData = data.docs.map((item) => {
+
+
+
+
+const categories = await product.getCategories();
+
+  const data = await product.getProducts(filters, options);
+
+
+const formattedData = data.docs.map((item) => {
         return {
           _id: item._id.toString(),
           title: item.title,
@@ -48,11 +61,28 @@ try {
         };
       });
 
-res.render(__dirname + '/views/index', {
+const updatedOptions = { ...options, page: 1 }; // Establecer la página en 1 para obtener la cantidad total de páginas actualizada
+const updatedData = await product.getProducts(filters, updatedOptions);
+
+const totalPages = updatedData.totalPages;
+
+
+  const context = {
     informacionProducto: formattedData,
-    existe: data.docs.length > 0
-    
-  });
+    existe: data.docs.length > 0,
+    categorias: categories,
+    pagination: {
+      page: data.page,
+      totalPages: data.totalPages,
+    }
+  };
+      
+
+        const range = Array.from({ length: totalPages }, (_, index) => index + 1);
+        context.totalPages = range;
+
+  console.log("context", context)
+res.render(__dirname + '/views/index', { context });
 } catch (error) {
     console.log("error al intentar cargar ", error)
 }

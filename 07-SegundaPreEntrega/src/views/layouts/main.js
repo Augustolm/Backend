@@ -1,50 +1,111 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    const categoriaSelect = document.querySelector('select[name="categoria"]');
-    const ordenSelect = document.querySelector('select[name="orden"]');
-    const pendienteSelect = document.querySelector('select[name="pendiente"]');
-    const comprarBtns = document.querySelectorAll('.comprar-btn');
-  
-    // Escucha el evento de cambio en el select de categoría
-    categoriaSelect.addEventListener('change', () => {
-      const categoriaSeleccionada = categoriaSelect.value;
-      console.log("categoriaSeleccionada", categoriaSeleccionada)
-      // Realiza la petición al backend con la categoría seleccionada
-      // ...
-    });
-  
-    // Escucha el evento de cambio en el select de orden
-    ordenSelect.addEventListener('change', () => {
-        const ordenSeleccionado = ordenSelect.value;      
-        const url = `/?sort=${ordenSeleccionado}`;
+  const categoriaSelect = document.querySelector('select[name="categoria"]');
+  const ordenSelect = document.querySelector('select[name="orden"]');
+  const paginacionSelect = document.querySelector('select[name="paginacion"]');
+  const comprarBtns = document.querySelectorAll('.comprar-btn');
 
-        fetch(url)
-        .then(response => response.text())
-        .then(html => {
-          // Crear un elemento temporal para analizar el HTML recibido
-          const tempElement = document.createElement('div');
-          tempElement.innerHTML = html;
-    
-          // Obtener solo la sección de productos del HTML recibido
-          const productosHTML = tempElement.querySelector('.productos').innerHTML;
-    
-          // Actualizar solo la parte necesaria de la página
-          document.querySelector('.productos').innerHTML = productosHTML;
-        })
-        .catch(error => {
-          console.error('Error al realizar la solicitud:', error);
-        });
-      
+  let categoriaSeleccionada = '';
+  let ordenSeleccionado = '';
+  let paginacionSeleccionado = '';
+
+  function buildURL() {
+    let url = '/';
+
+    if (categoriaSeleccionada) {
+      url += `?categoria=${categoriaSeleccionada}`;
+    }
+
+    if (ordenSeleccionado) {
+      url += `${categoriaSeleccionada ? '&' : '?'}sort=${ordenSeleccionado}`;
+    }
+
+    if (paginacionSeleccionado) {
+      url += `${categoriaSeleccionada || ordenSeleccionado ? '&' : '?'}page=${paginacionSeleccionado}`;
+    }
+
+    return url;
+  }
+
+
+  categoriaSelect.addEventListener('change', () => {
+    categoriaSeleccionada = categoriaSelect.value;
+    const url = buildURL();
+
+    fetch(url)
+    .then(response => response.text())
+    .then(html => {
+      const tempElement = document.createElement('div');
+      tempElement.innerHTML = html;
+  
+      const productosHTML = tempElement.querySelector('.productos').innerHTML;
+      const selectHTML = tempElement.querySelector('.pagination select').innerHTML;
+  
+      document.querySelector('.productos').innerHTML = productosHTML;
+      document.querySelector('.pagination select').innerHTML = selectHTML;
+  
+
+      const categoriaSelect = document.querySelector('.pagination select[name="categoria"]');
+      categoriaSelect.value = categoriaSeleccionada;
+    })
+    .catch(error => {
+      console.error('Error al realizar la solicitud:', error);
     });
-    // Escucha el evento de cambio en el select de pendiente
-    pendienteSelect.addEventListener('change', () => {
-      const pendienteSeleccionado = pendienteSelect.value;
-        console.log("pendienteSeleccionado", pendienteSeleccionado)
-      // Realiza la petición al backend con el pendiente seleccionado
-      // ...
+  });
+
+
+  ordenSelect.addEventListener('change', () => {
+    ordenSeleccionado = ordenSelect.value;
+    const url = buildURL();
+
+    fetch(url)
+      .then(response => response.text())
+      .then(html => {
+
+         const tempElement = document.createElement('div');
+         tempElement.innerHTML = html;
+
+         const productosHTML = tempElement.querySelector('.productos').innerHTML;
+
+         document.querySelector('.productos').innerHTML = productosHTML;
+       
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+      });
+ 
+
+ 
+
+
+
+    });
+
+    paginacionSelect.addEventListener('change', () => {
+        paginacionSeleccionado = paginacionSelect.value;
+
+      const url = buildURL();
+
+      fetch(url)
+      .then(response => response.text())
+      .then(html => {
+
+         const tempElement = document.createElement('div');
+         tempElement.innerHTML = html;
+   
+
+         const productosHTML = tempElement.querySelector('.productos').innerHTML;
+   
+         document.querySelector('.productos').innerHTML = productosHTML;
+       
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+      });
+
     });
   
-    // Escucha el evento de clic en los botones de comprar
+
     comprarBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         const productId = btn.dataset.productId;
@@ -54,6 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   
-    // Resto del código...
+
   });
   

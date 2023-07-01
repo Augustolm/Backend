@@ -9,9 +9,7 @@ import routerProduct from './Router/router.product.js';
 import handlebars from 'handlebars';
 
 
-const eq = (a, b) => {
-  return a === b;
-};
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,6 +25,28 @@ const httpServer = createHttpServer(app);
 app.use('', routerProduct);
 
 //Handelbars
+const eq = (a, b) => {
+  return a === b;
+};
+
+const pagesInRange = function () {
+  const currentPage = this.context.pagination.page;
+  const totalPages = this.context.pagination.totalPages;
+  const range = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === 1 ||
+      i === totalPages ||
+      (i >= currentPage - 2 && i <= currentPage + 2)
+    ) {
+      range.push(i);
+    }
+  }
+
+  return range;
+};
+
 
 app.engine('handlebars', engine({
   extname: 'handlebars',
