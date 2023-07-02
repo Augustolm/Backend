@@ -19,10 +19,7 @@ try {
     const limit = parseInt(req.query.limit) || 5;
     const filters = {};
 
-    
-
-
- const options = {
+    const options = {
     page,
     limit,
     ...(req.query.select && { select: req.query.select }),
@@ -38,15 +35,10 @@ try {
   }
 
 
-
-
-
-const categories = await product.getCategories();
-
+  const categories = await product.getCategories();
   const data = await product.getProducts(filters, options);
 
-
-const formattedData = data.docs.map((item) => {
+  const formattedData = data.docs.map((item) => {
         return {
           _id: item._id.toString(),
           title: item.title,
@@ -59,9 +51,9 @@ const formattedData = data.docs.map((item) => {
           stock: item.stock,
           timestamp: item.timestamp,
         };
-      });
+  });
 
-const updatedOptions = { ...options, page: 1 }; // Establecer la página en 1 para obtener la cantidad total de páginas actualizada
+const updatedOptions = { ...options, page: 1 };
 const updatedData = await product.getProducts(filters, updatedOptions);
 
 const totalPages = updatedData.totalPages;
@@ -78,11 +70,12 @@ const totalPages = updatedData.totalPages;
   };
       
 
-        const range = Array.from({ length: totalPages }, (_, index) => index + 1);
-        context.totalPages = range;
+  const range = Array.from({ length: totalPages }, (_, index) => index + 1);
+  context.totalPages = range;
 
-  console.log("context", context)
-res.render(__dirname + '/views/index', { context });
+  res.render(__dirname + '/views/index', { context });
+
+  
 } catch (error) {
     console.log("error al intentar cargar ", error)
 }
@@ -94,10 +87,6 @@ routerProduct.post('/add', async (req, res) => {
     console.log("result", result)
     res.redirect('/');
 });
-
-
-
-
 
 
 export default routerProduct;
