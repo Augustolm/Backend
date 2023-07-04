@@ -1,0 +1,77 @@
+<h1 class="titulo">Lista de productos</h1>
+<div class="empresa d-flex justify-content-end">
+    <button class="btn btn-primary mr-2 rounded-circle" style="background-color: #FF5722;">
+      <a href="/api/carrito" rel="noopener noreferrer" class="text-white text-decoration-none">Carrito</a>
+    </button>
+
+    <button class="btn btn-primary">
+        <a href="/login" class="text-white text-decoration-none">Iniciar sesión</a>
+    </button>
+    
+  
+</div>
+
+</div>
+<div class="linea"></div>
+<div class="menu">
+    <div class="form-group">
+        <label for="categoria">Categoria:</label>
+        <select name="categoria" id="categoria" class="custom-select">
+            <option value="0">Todo</option>
+            {{#if context.categorias}}
+            {{#each context.categorias}}
+            <option value="{{this}}">{{this}}</option>
+            {{/each}}
+            {{/if}}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="orden">Orden:</label>
+        <select name="orden" id="orden" class="custom-select">
+            <option value="0">Ordenar</option>
+            <option value="1">Ascendente</option>
+            <option value="-1">Descendente</option>
+        </select>
+    </div>
+    <div class="form-group pagination">
+        <label for="paginacion">Pagination:</label>
+        <select name="paginacion" id="paginacion" {{#if (eq context.pagination.totalPage 1)}} disabled{{/if}} class="custom-select">
+            {{#each context.totalPages}}
+            {{#if (eq this context.pagination.page)}}
+            <option value="{{this}}" selected>{{this}}</option>
+            {{else}}
+            <option value="{{this}}">{{this}}</option>
+            {{/if}}
+            {{/each}}
+        </select>
+    </div>
+    <button class="btn btn-primary">
+        <a href="/cargarProductos" class="text-white text-decoration-none">Cargar Productos</a>
+    </button>
+</div>
+
+<div class="productos">
+    <div id="product" class="listaProductos">
+        {{#if context.existe}}
+        <div class="tarjetas">
+            {{#each context.informacionProducto}}
+            <div class="tarjeta">
+                <img class="img-small" src={{this.thumbnail}} alt="img">
+                <h3>{{this.title}}</h3>
+                <p>{{this.description}}</p>
+                <p>Precio: {{this.price}}</p>
+                <p>Estado: {{this.status}}</p>
+                <p>Categoría: {{this.category}}</p>
+                <p>Código: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <button class="comprar-btn" data-product-id="{{this._id}}">Comprar</button>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <h1>No existen datos</h1>
+        {{/if}}
+    </div>
+      
+</div>
+
