@@ -1,15 +1,40 @@
-<h1 class="titulo">Lista de productos</h1>
-<div class="empresa d-flex justify-content-end">
-    <button class="btn btn-primary mr-2 rounded-circle" style="background-color: #FF5722;">
-      <a href="/api/carrito" rel="noopener noreferrer" class="text-white text-decoration-none">Carrito</a>
-    </button>
+<div class="d-flex justify-content-between align-items-center">
 
-    <button class="btn btn-primary">
-        <a href="/login" class="text-white text-decoration-none">Iniciar sesión</a>
-    </button>
-    
-  
+     <h1 class="titulo custom-title">
+        {{#if context.user}}
+            Hola {{context.user}}
+        {{else}}
+            Lista de productos
+        {{/if}}
+    </h1>
+
+
+
+    <div class="mt-2">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-primary no-margin-top " style="background-color: #FF5722;">
+                <a href="/api/carrito" rel="noopener noreferrer" class="text-white text-decoration-none">Carrito</a>
+            </button>
+
+            {{#if context.user}}
+                <form action="/login/logout" method="POST">
+                    <button class="btn btn-primary" type="submit">
+                        Cerrar sesión
+                    </button>
+                </form>
+            {{else}}
+                <button class="btn btn-primary">
+                    <a href="/login" class="text-white text-decoration-none">Iniciar sesión</a>
+                </button>
+            {{/if}}
+        </div>
+    </div>
 </div>
+
+
+
+
+
 
 </div>
 <div class="linea"></div>
@@ -56,7 +81,7 @@
         <div class="tarjetas">
             {{#each context.informacionProducto}}
             <div class="tarjeta">
-                <img class="img-small" src={{this.thumbnail}} alt="img">
+                {{!-- <img class="img-small" src={{this.thumbnail}} alt="img"> --}}
                 <h3>{{this.title}}</h3>
                 <p>{{this.description}}</p>
                 <p>Precio: {{this.price}}</p>

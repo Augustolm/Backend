@@ -190,12 +190,19 @@ body{
 }
 
 
-.carrito a {
-  text-decoration: none;
-  color: inherit;
-}
 
 .carrito a:hover {
   text-decoration: none;
   color: inherit;
+}
+
+.custom-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+
+}
+
+#welcome-message {
+  display: none;
 }

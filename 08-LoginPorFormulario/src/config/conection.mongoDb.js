@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-export const connectionURL = 'mongodb+srv://augusto:lolalola@cluster0.fygmuos.mongodb.net/';
+export const connectionURL =
+  "mongodb+srv://augusto:lolalola@cluster0.fygmuos.mongodb.net/";
 
 export const connectToDatabase = async () => {
   try {

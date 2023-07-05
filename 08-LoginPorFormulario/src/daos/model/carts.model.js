@@ -1,23 +1,20 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose, { mongo } from "mongoose";
 
-const collection = 'cards';
-
+const collection = "cards";
 
 const cartSchema = new mongoose.Schema({
-
-    products: {
-        type: [
-          {
-            product: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "productos",
-            }
-          }
-        ],
-        default: [] 
+  products: {
+    type: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "productos",
+        },
       },
-      timestamp: { type: Date, default: Date.now },
-
+    ],
+    default: [],
+  },
+  timestamp: { type: Date, default: Date.now },
 });
 
 export const cartModel = mongoose.model(collection, cartSchema);
