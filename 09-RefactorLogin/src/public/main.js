@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriaSelect = document.querySelector('select[name="categoria"]');
   const ordenSelect = document.querySelector('select[name="orden"]');
   const paginacionSelect = document.querySelector('select[name="paginacion"]');
-  const comprarBtns = document.querySelectorAll(".comprar-btn");
-  const deleteButtons = document.querySelectorAll(".btn-borrar");
+  const productosContainer = document.querySelector(".productos");
 
   let categoriaSeleccionada = "";
   let ordenSeleccionado = "";
@@ -29,85 +28,74 @@ document.addEventListener("DOMContentLoaded", () => {
     return url;
   }
 
+  function updateProducts(html) {
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = html;
+
+    const productosHTML = tempElement.querySelector(".productos").innerHTML;
+
+    productosContainer.innerHTML = productosHTML;
+  }
+
+  function handleCategoriaChange() {
+    categoriaSeleccionada = categoriaSelect.value;
+    const url = buildURL();
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        updateProducts(html);
+      })
+      .catch((error) => {
+        console.error("Error al realizar la solicitud:", error);
+      });
+  }
+
+  function handleOrdenChange() {
+    ordenSeleccionado = ordenSelect.value;
+    const url = buildURL();
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        updateProducts(html);
+      })
+      .catch((error) => {
+        console.error("Error al realizar la solicitud:", error);
+      });
+  }
+
+  function handlePaginacionChange() {
+    paginacionSeleccionado = paginacionSelect.value;
+    const url = buildURL();
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        updateProducts(html);
+      })
+      .catch((error) => {
+        console.error("Error al realizar la solicitud:", error);
+      });
+  }
+
   if (categoriaSelect) {
-    categoriaSelect.addEventListener("change", () => {
-      categoriaSeleccionada = categoriaSelect.value;
-      const url = buildURL();
-
-      fetch(url)
-        .then((response) => response.text())
-        .then((html) => {
-          const tempElement = document.createElement("div");
-          tempElement.innerHTML = html;
-
-          const productosHTML =
-            tempElement.querySelector(".productos").innerHTML;
-          const selectHTML =
-            tempElement.querySelector(".pagination select").innerHTML;
-
-          document.querySelector(".productos").innerHTML = productosHTML;
-          document.querySelector(".pagination select").innerHTML = selectHTML;
-
-          const categoriaSelect = document.querySelector(
-            '.pagination select[name="categoria"]'
-          );
-          categoriaSelect.value = categoriaSeleccionada;
-        })
-        .catch((error) => {
-          console.error("Error al realizar la solicitud:", error);
-        });
-    });
+    categoriaSelect.addEventListener("change", handleCategoriaChange);
   }
 
   if (ordenSelect) {
-    ordenSelect.addEventListener("change", () => {
-      ordenSeleccionado = ordenSelect.value;
-      const url = buildURL();
-
-      fetch(url)
-        .then((response) => response.text())
-        .then((html) => {
-          const tempElement = document.createElement("div");
-          tempElement.innerHTML = html;
-
-          const productosHTML =
-            tempElement.querySelector(".productos").innerHTML;
-
-          document.querySelector(".productos").innerHTML = productosHTML;
-        })
-        .catch((error) => {
-          console.error("Error al realizar la solicitud:", error);
-        });
-    });
+    ordenSelect.addEventListener("change", handleOrdenChange);
   }
 
   if (paginacionSelect) {
-    paginacionSelect.addEventListener("change", () => {
-      paginacionSeleccionado = paginacionSelect.value;
-
-      const url = buildURL();
-
-      fetch(url)
-        .then((response) => response.text())
-        .then((html) => {
-          const tempElement = document.createElement("div");
-          tempElement.innerHTML = html;
-
-          const productosHTML =
-            tempElement.querySelector(".productos").innerHTML;
-
-          document.querySelector(".productos").innerHTML = productosHTML;
-        })
-        .catch((error) => {
-          console.error("Error al realizar la solicitud:", error);
-        });
-    });
+    paginacionSelect.addEventListener("change", handlePaginacionChange);
   }
 
-  if (comprarBtns) {
-    comprarBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const productId = btn.dataset.productId;
+  if (productosContainer) {
+    productosContainer.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target.classList.contains("comprar-btn")) {
+        const productId = target.dataset.productId;
         console.log("productId", productId);
 
         const carritoTest = "64a19d9c6ab70dcbf8280238";
@@ -127,35 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .catch((error) => {
             console.error("Error al realizar la solicitud:", error);
           });
-      });
-    });
-  }
-
-  if (deleteButtons) {
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const productId = event.target.dataset.productId;
-        const carritoTest = "64a19d9c6ab70dcbf8280238";
-        const url = `/api/carrito/${carritoTest}/productos?productId=${productId}`;
-
-        fetch(url, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => {
-            if (response.ok) {
-              alert("Producto eliminado correctamente");
-              window.location.reload();
-            } else {
-              throw new Error("Error al realizar la eliminación");
-            }
-          })
-          .catch((error) => {
-            console.error("Error al realizar la eliminación:", error);
-          });
-      });
+      }
     });
   }
 });

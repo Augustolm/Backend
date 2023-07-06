@@ -3,9 +3,8 @@ import { engine } from "express-handlebars";
 import { createServer as createHttpServer } from "http";
 import path from "path";
 import routerProduct from "./Router/router.product.js";
-import cookieParser from "cookie-parser";
 import session from "express-session";
-import routerCars from "./Router/router.cars.js";
+import routerCars from "./Router/router.card.js";
 import routerLogin from "./Router/router.login.js";
 import fileStore from "session-file-store";
 import { fileURLToPath } from "url";
@@ -15,7 +14,7 @@ import {
   connectToDatabase,
   connectionURL,
 } from "./config/conection.mongoDb.js";
-import { eq } from "./utils/utilidadesHandel.js";
+import { eq, isEmpty } from "./utils/utilidadesHandel.js";
 
 //utils
 
@@ -27,6 +26,7 @@ const app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 const httpServer = createHttpServer(app);
 
 //conecto a la base de datos
@@ -55,16 +55,17 @@ app.use(
     saveUninitialized: false,
   })
 );
+// app.use(passaport.initialize());
 
-export function auth(req, res, next) {
-  if (req?.session?.user?.rol === "admin") {
-    return next();
-  } else {
-    res.render(path.join(__dirname, "views/error"), {
-      errorMessage: "Acceso no autorizado ERROR 403",
-    });
-  }
-}
+// export function auth(req, res, next) {
+//   if (req?.session?.user?.rol === "admin") {
+//     return next();
+//   } else {
+//     res.render(path.join(__dirname, "views/error"), {
+//       errorMessage: "Acceso no autorizado ERROR 403",
+//     });
+//   }
+// }
 
 //error 401 autenticacion
 
@@ -99,6 +100,7 @@ app.engine(
     layoutsDir: path.join(__dirname, "/views/layouts"),
     helpers: {
       eq: eq,
+      isEmpty: isEmpty,
     },
   })
 );

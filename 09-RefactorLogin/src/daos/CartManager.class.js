@@ -3,13 +3,13 @@ import { cartModel } from "./model/carts.model.js";
 import { productoModel } from "./model/producto.js";
 
 export default class CartManager {
-  async createCard() {
+  async createCart() {
     try {
       const emptyCard = {};
       const result = await cartModel.create(emptyCard);
-      return result._id;
+      return result;
     } catch (error) {
-      console.log("Error al cargar los productos", error);
+      console.log("Error al crear el carrito", error);
     }
   }
 

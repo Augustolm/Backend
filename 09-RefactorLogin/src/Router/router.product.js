@@ -1,6 +1,8 @@
 import { Router } from "express";
 import ProductManager from "../daos/ProductManager.class.js";
-import __dirname, { auth } from "../app.js";
+import __dirname from "../app.js";
+import { auth } from "../utils/auth.rol.js";
+import { authToken } from "../utils/jwt.js";
 
 const routerProduct = Router();
 const product = new ProductManager();
@@ -47,8 +49,6 @@ routerProduct.get("/", async (req, res) => {
     const updatedData = await product.getProducts(filters, updatedOptions);
 
     const totalPages = updatedData.totalPages;
-
-    console.log("usuario: req.session?.user.nombre,", req?.session);
 
     const context = {
       informacionProducto: formattedData,

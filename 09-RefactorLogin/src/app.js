@@ -15,7 +15,8 @@ import {
   connectToDatabase,
   connectionURL,
 } from "./config/conection.mongoDb.js";
-import { eq } from "./utils/utilidadesHandel.js";
+import { eq, isEmpty } from "./utils/utilidadesHandel.js";
+import { initializePassport } from "./config/passport.config.js";
 
 //utils
 
@@ -27,6 +28,7 @@ const app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 const httpServer = createHttpServer(app);
 
 //conecto a la base de datos
@@ -38,6 +40,12 @@ const Filestorage = fileStore(session);
 //cookies
 //app.use(cookieParser());
 
+//boton login guithab
+// <div>
+//     <a href='/api/sessions/github'><button>entrar con github</button></a>
+// </div>
+
+// initializePassport();
 //session
 const sessionStore = new MongoStore({
   mongoUrl: connectionURL,
@@ -55,16 +63,17 @@ app.use(
     saveUninitialized: false,
   })
 );
+// app.use(passaport.initialize());
 
-export function auth(req, res, next) {
-  if (req?.session?.user?.rol === "admin") {
-    return next();
-  } else {
-    res.render(path.join(__dirname, "views/error"), {
-      errorMessage: "Acceso no autorizado ERROR 403",
-    });
-  }
-}
+// export function auth(req, res, next) {
+//   if (req?.session?.user?.rol === "admin") {
+//     return next();
+//   } else {
+//     res.render(path.join(__dirname, "views/error"), {
+//       errorMessage: "Acceso no autorizado ERROR 403",
+//     });
+//   }
+// }
 
 //error 401 autenticacion
 
@@ -99,6 +108,7 @@ app.engine(
     layoutsDir: path.join(__dirname, "/views/layouts"),
     helpers: {
       eq: eq,
+      isEmpty: isEmpty,
     },
   })
 );

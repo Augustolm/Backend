@@ -2,6 +2,7 @@ import { Router } from "express";
 import __dirname from "../app.js";
 import { userModel } from "../daos/model/user.model.js";
 import { validateEmail } from "../utils/valdiateEmail.js";
+import { createToken } from "../utils/jwt.js";
 
 const routerLogin = Router();
 
@@ -72,6 +73,8 @@ routerLogin.post("/login/login", async (req, res) => {
       age: user.age,
       rol: user.rol,
     };
+
+    createToken(user);
 
     res.status(200).send({ message: "Usuario logueado correctamente" });
   } catch (error) {

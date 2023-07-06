@@ -3,13 +3,13 @@ import { cartModel } from "./model/carts.model.js";
 import { productoModel } from "./model/producto.js";
 
 export default class CartManager {
-  async createCard() {
+  async createCart() {
     try {
       const emptyCard = {};
       const result = await cartModel.create(emptyCard);
-      return result._id;
+      return result;
     } catch (error) {
-      console.log("Error al cargar los productos", error);
+      console.log("Error al crear el carrito", error);
     }
   }
 
@@ -45,10 +45,6 @@ export default class CartManager {
       cart.products.push(cartItem);
 
       await cart.save();
-
-      console.log(
-        `Producto con ID ${productId} agregado al carrito con ID ${cardId}`
-      );
     } catch (error) {
       console.log(`Error al agregar el producto al carrito: ${error}`);
     }
@@ -90,10 +86,6 @@ export default class CartManager {
       cart.products.splice(productIndex, 1);
 
       await cart.save();
-
-      console.log(
-        `Producto con ID ${productId} eliminado del carrito con ID ${cardId}`
-      );
     } catch (error) {
       console.log(`Error al eliminar el producto del carrito: ${error}`);
     }

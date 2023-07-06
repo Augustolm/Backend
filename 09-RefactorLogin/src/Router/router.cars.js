@@ -9,14 +9,17 @@ const cartManager = new CartManager();
 const productManager = new ProductManager();
 
 routerCars.get("/carrito", async (req, res) => {
-  // const idCart = req.params.id;
-  const idCart = "64a19d9c6ab70dcbf8280238";
-
   try {
+    let cartId = req.session.cartId;
     let cart;
 
-    if (idCart) {
-      cart = await cartManager.getCartById(idCart);
+    if (!cartId) {
+      const newCart = await cartManager.createCart();
+      cartId = newCart._id;
+      req.session.cartId = cartId;
+      cart = newCart;
+    } else {
+      cart = await cartManager.getCartById(cartId);
     }
 
     const productIds = cart.products.map((item) => item.product);
@@ -38,27 +41,35 @@ routerCars.get("/carrito", async (req, res) => {
 });
 
 routerCars.post("/carrito/:id/productos", async (req, res) => {
-  //Logica para encontrar el carrito del usuario { usuario, carrito: [] }
-  const idCart = "64a19d9c6ab70dcbf8280238"; //req.params.id;
   const productId = req.query.productId; // Obtener el ID del producto de la consulta
 
   try {
-    await cartManager.addProductToCart(idCart, productId);
+    let cartId = req.session.cartId;
+    let newCart = null;
+
+    if (!cartId) {
+      newCart = await cartManager.createCart();
+      cartId = newCart._id;
+      req.session.cartId = cartId;
+    } else {
+      newCart = await cartManager.getCartById(cartId);
+    }
+
+    await cartManager.addProductToCart(newCart, productId);
+
+    res.status(200).send("Producto agregado al carrito exitosamente");
   } catch (error) {
     console.log("Error al agregar producto al carrito", error);
     res.status(500).send("Ocurrió un error al agregar producto al carrito");
   }
 });
 
-routerCars.delete("/carrito/:id/productos", async (req, res) => {
-  console.log("pase por aca");
-
+routerCars.delete("/carrito/productos", async (req, res) => {
   try {
-    const idCart = "64a19d9c6ab70dcbf8280238"; // req.params.id;
-    const productId = req.query.productId; // Obtener el ID del producto de la consulta
-    console.log("producto desde el back", productId);
+    let cartId = req.session.cartId;
+    const productId = req.query.productId;
 
-    await cartManager.deleteProductCard(idCart, productId);
+    await cartManager.deleteProductCard(cartId, productId);
 
     res.sendStatus(200);
   } catch (error) {
