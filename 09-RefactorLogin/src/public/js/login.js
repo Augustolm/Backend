@@ -2,6 +2,12 @@ document.getElementById("loginBtn").addEventListener("click", function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  if (!email || !password) {
+    // Validar que los campos no estén vacíos
+    console.error("Por favor ingrese su correo electrónico y contraseña");
+    return;
+  }
+
   const data = {
     email: email,
     password: password,
@@ -77,6 +83,11 @@ document
     const email = document.getElementById("email").value;
     const age = document.getElementById("age").value;
     const lastName = document.getElementById("lastname").value;
+
+    if (!usuario || !password || !email || !age || !lastName) {
+      console.error("Por favor complete todos los campos");
+      return;
+    }
 
     const data = {
       usuario: usuario,

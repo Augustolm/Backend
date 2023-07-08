@@ -3,6 +3,7 @@ import ProductManager from "../daos/ProductManager.class.js";
 import __dirname from "../app.js";
 import { auth } from "../utils/auth.rol.js";
 import { authToken } from "../utils/jwt.js";
+import { userModel } from "../daos/model/user.model.js";
 
 const routerProduct = Router();
 const product = new ProductManager();
@@ -47,8 +48,11 @@ routerProduct.get("/", async (req, res) => {
 
     const updatedOptions = { ...options, page: 1 };
     const updatedData = await product.getProducts(filters, updatedOptions);
-
     const totalPages = updatedData.totalPages;
+    const userId = req?.session?.passport?.user;
+    const user = await userModel.findById(userId);
+
+    const { first_name, last_name, email, age, rol } = user || {};
 
     const context = {
       informacionProducto: formattedData,
@@ -58,8 +62,8 @@ routerProduct.get("/", async (req, res) => {
         page: data.page,
         totalPages: data.totalPages,
       },
-      user: req?.session?.user?.name,
-      rol: req?.session?.user?.rol,
+      user: first_name,
+      rol: rol,
     };
 
     const range = Array.from({ length: totalPages }, (_, index) => index + 1);

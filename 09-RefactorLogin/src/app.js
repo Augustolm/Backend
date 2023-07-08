@@ -17,6 +17,8 @@ import {
 } from "./config/conection.mongoDb.js";
 import { eq, isEmpty } from "./utils/utilidadesHandel.js";
 import { initializePassport } from "./config/passport.config.js";
+import passport from "passport";
+import routerGuitHub from "./Router/router.guitHub.js";
 
 //utils
 
@@ -36,6 +38,9 @@ const conection = connectToDatabase();
 
 //fileStore
 const Filestorage = fileStore(session);
+
+//passportGuitHub
+initializePassport();
 
 //cookies
 //app.use(cookieParser());
@@ -63,40 +68,12 @@ app.use(
     saveUninitialized: false,
   })
 );
-// app.use(passaport.initialize());
 
-// export function auth(req, res, next) {
-//   if (req?.session?.user?.rol === "admin") {
-//     return next();
-//   } else {
-//     res.render(path.join(__dirname, "views/error"), {
-//       errorMessage: "Acceso no autorizado ERROR 403",
-//     });
-//   }
-// }
-
-//error 401 autenticacion
-
-//error 403 faltan credenciales
-
-// app.get('/session', async (req, res) => {
-//   req.session.user = 'pepe';
-//   req.session.rol = "admin";
-//   req.session.visitas = req.session.visitas ? req.session.visitas + 1 : 1;
-//   console.log("req.session", req.session)
-
-//   res.send(`El isiario ${req.session.user} tiene el rol ${req.session.rol} y ha visitado la pagina ${req.session.visitas} veces`);
-// })
-
-// app.get('/distroy', async (req, res) => {
-//   req.session.destroy();
-//   console.log("req.session", req.session)
-
-//   res.send(`Sesion destruida`);
-// })
+app.use(passport.initialize());
 
 //roting
 app.use("", routerLogin);
+app.use("", routerGuitHub);
 app.use("", routerProduct);
 app.use("/api", routerCars);
 

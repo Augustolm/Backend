@@ -2,7 +2,8 @@ import { Router } from "express";
 import __dirname from "../app.js";
 import { userModel } from "../daos/model/user.model.js";
 import { validateEmail } from "../utils/valdiateEmail.js";
-import { createToken } from "../utils/jwt.js";
+import { comparePasswords, encryptPassword } from "../utils/logicPassword.js";
+import passport from "passport";
 
 const routerLogin = Router();
 
@@ -11,77 +12,115 @@ routerLogin.get("/login", async (req, res) => {
   res.render(__dirname + "/views/login");
 });
 
-routerLogin.post("/login/register", async (req, res) => {
+// routerLogin.post("/login/register", async (req, res) => {
+//   try {
+//     const { usuario, lastName, password, email, age } = req.body;
+//     const exist = await userModel.findOne({ email });
+
+//     if (exist) {
+//       return res.status(400).send({ message: "El usuario ya existe" });
+//     }
+
+//     const validateRespuesta = validateEmail(email);
+
+//     const hashedPassword = await encryptPassword(password);
+//     console.log("hashedPassword", hashedPassword);
+
+//     const newUser = await userModel.create({
+//       first_name: usuario,
+//       last_name: lastName,
+//       email: email,
+//       age: age,
+//       password: hashedPassword,
+//       rol: validateRespuesta ? "admin" : "user",
+//     });
+
+//     req.session.user = {
+//       name: usuario,
+//       apellido: lastName,
+//       email: email,
+//       age: age,
+//       rol: validateRespuesta ? "admin" : "user",
+//     };
+
+//     req.session.nuevoUser = true;
+
+//     res.status(200).send({ message: "Usuario creado correctamente" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ message: "Error al crear el usuario" });
+//   }
+// });
+
+routerLogin.post(
+  "/login/register",
+  passport.authenticate("register", {
+    successRedirect: "/login/profile",
+    failureRedirect: "/login",
+  })
+);
+
+routerLogin.get("/login/profile", async (req, res) => {
   try {
-    const { usuario, lastName, password, email, age } = req.body;
-    const exist = await userModel.findOne({ email });
-
-    if (exist) {
-      return res.status(400).send({ message: "El usuario ya existe" });
-    }
-
-    const validateRespuesta = validateEmail(email);
-
-    const newUser = await userModel.create({
-      first_name: usuario,
-      last_name: lastName,
-      email: email,
-      age: age,
-      password: password,
-      rol: validateRespuesta ? "admin" : "user",
-    });
-
-    req.session.user = {
-      name: usuario,
-      apellido: lastName,
-      email: email,
-      age: age,
-      rol: validateRespuesta ? "admin" : "user",
-    };
-
-    req.session.nuevoUser = true;
-
-    res.status(200).send({ message: "Usuario creado correctamente" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Error al crear el usuario" });
-  }
-});
-
-routerLogin.get("/login/profile", (req, res) => {
-  res.render(__dirname + "/views/profile", {
-    datosUsuario: req.session?.user,
-    isNewUser: req.session.nuevoUser,
-  });
-});
-
-routerLogin.post("/login/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email, password: password });
-
+    const userId = req.session.passport.user;
+    const user = await userModel.findById(userId);
     if (!user) {
-      return res
-        .status(400)
-        .send({ message: "Usuario o contraseña incorrectos" });
+      return res.status(404).send({ message: "Usuario no encontrado" });
     }
-
-    req.session.user = {
-      name: user.first_name,
-      apellido: user.last_name,
-      email: user.email,
-      age: user.age,
-      rol: user.rol,
-    };
-
-    createToken(user);
-
-    res.status(200).send({ message: "Usuario logueado correctamente" });
+    const { first_name, last_name, email, age } = user;
+    res.render(__dirname + "/views/profile", {
+      datosUsuario: { first_name, last_name, email, age },
+      isNewUser: req.session.nuevoUser,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Error al intentar loguear" });
+    res
+      .status(500)
+      .send({ message: "Error al obtener la información del usuario" });
   }
 });
+
+// routerLogin.post("/login/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await userModel.findOne({ email: email });
+
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .send({ message: "Usuario o contraseña incorrectos" });
+//     }
+//     console.log("user", user);
+//     const passwordMatch = await comparePasswords(password, user.password);
+//     console.log("passwordMatch", passwordMatch);
+//     if (!passwordMatch) {
+//       return res
+//         .status(400)
+//         .send({ message: "Usuario o contraseña incorrectos" });
+//     }
+
+//     req.session.user = {
+//       name: user.first_name,
+//       apellido: user.last_name,
+//       email: user.email,
+//       age: user.age,
+//       rol: user.rol,
+//     };
+
+//     res.status(200).send({ message: "Usuario logueado correctamente" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ message: "Error al intentar loguear" });
+//   }
+// });
+
+routerLogin.post(
+  "/login/login",
+  passport.authenticate("login", {
+    successRedirect: "/login/profile",
+    failureRedirect: "/login",
+  })
+);
 
 routerLogin.post("/login/logout", async (req, res) => {
   try {
