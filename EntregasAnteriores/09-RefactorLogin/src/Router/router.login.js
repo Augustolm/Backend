@@ -63,6 +63,7 @@ routerLogin.post(
 routerLogin.get("/login/profile", async (req, res) => {
   try {
     const userId = req.session.passport.user;
+    console.log("userId", req.session);
     const user = await userModel.findById(userId);
     if (!user) {
       return res.status(404).send({ message: "Usuario no encontrado" });
