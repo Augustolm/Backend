@@ -1,13 +1,13 @@
 import { Router } from "express";
-import ProductManager from "../daos/ProductManagerDAO.js";
-import CartManager from "../daos/CartManagerDAO.js";
 import __dirname from "../app.js";
 import { userModel } from "../daos/model/user.model.js";
+import CartController from "../controllers/cart.controller.js";
+import ProductController from "../controllers/product.controller.js";
 
 const routerCars = Router();
 
-const cartManager = new CartManager();
-const productManager = new ProductManager();
+let cartController = new CartController();
+let productController = new ProductController();
 
 routerCars.get("/carrito", async (req, res) => {
   console.log("req.session", req.session);
@@ -16,18 +16,20 @@ routerCars.get("/carrito", async (req, res) => {
     let cart;
 
     if (!cartId) {
-      const newCart = await cartManager.createCart();
+      const newCart = await cartController.createCartController();
       cartId = newCart._id;
       req.session.cartId = cartId;
       cart = newCart;
     } else {
-      cart = await cartManager.getCartById(cartId);
+      cart = await cartController.getCartByIdController(cartId);
     }
 
     const productIds = cart.products.map((item) => item.product);
 
     const products = await Promise.all(
-      productIds.map((productId) => productManager.getProductById(productId))
+      productIds.map((productId) =>
+        productController.getProductByIdController(productId)
+      )
     );
 
     const productosSinPrototipo = products.map((product) => product.toObject());
@@ -50,12 +52,12 @@ routerCars.post("/carrito/:id/productos", async (req, res) => {
   try {
     let newCart = null;
     if (!user.cart) {
-      newCart = await cartManager.createCart();
+      newCart = await cartController.createCartController();
     } else {
-      newCart = await cartManager.getCartById(user.cart);
+      newCart = await cartController.getCartByIdController(user.cart);
     }
 
-    await cartManager.addProductToCart(newCart, productId);
+    await cartController.addProductToCartController(newCart, productId);
 
     res.status(200).send("Producto agregado al carrito exitosamente");
   } catch (error) {
@@ -69,7 +71,7 @@ routerCars.delete("/carrito/productos", async (req, res) => {
     let cartId = req.session.cartId;
     const productId = req.query.productId;
 
-    await cartManager.deleteProductCard(cartId, productId);
+    await cartController.deleteCardController(cartId, productId);
 
     res.sendStatus(200);
   } catch (error) {

@@ -1,12 +1,13 @@
 import { Router } from "express";
-import ProductManager from "../daos/ProductManagerDAO.js";
+
 import __dirname from "../app.js";
 import { auth } from "../utils/auth.rol.js";
-import { authToken } from "../utils/jwt.js";
 import { userModel } from "../daos/model/user.model.js";
+import ProductController from "../controllers/product.controller.js";
 
 const routerProduct = Router();
-const product = new ProductManager();
+
+let productController = new ProductController();
 
 routerProduct.get("/", async (req, res) => {
   try {
@@ -28,8 +29,11 @@ routerProduct.get("/", async (req, res) => {
       filters.category = req.query.categoria;
     }
 
-    const categories = await product.getCategories();
-    const data = await product.getProducts(filters, options);
+    const categories = await productController.getCategoriesController();
+    const data = await productController.getProductsController(
+      filters,
+      options
+    );
 
     const formattedData = data.docs.map((item) => {
       return {
@@ -47,7 +51,10 @@ routerProduct.get("/", async (req, res) => {
     });
 
     const updatedOptions = { ...options, page: 1 };
-    const updatedData = await product.getProducts(filters, updatedOptions);
+    const updatedData = await productController.getProductsController(
+      filters,
+      updatedOptions
+    );
     const totalPages = updatedData.totalPages;
     const userId = req?.session?.passport?.user;
     const user = await userModel.findById(userId);

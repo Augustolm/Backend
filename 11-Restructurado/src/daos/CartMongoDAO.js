@@ -2,7 +2,7 @@
 import { cartModel } from "./model/carts.model.js";
 import { productoModel } from "./model/producto.js";
 
-export default class CartManager {
+export default class CartMongoDAO {
   async createCart() {
     try {
       const emptyCard = {};

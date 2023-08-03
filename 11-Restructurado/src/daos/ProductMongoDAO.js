@@ -1,6 +1,6 @@
 import { productoModel } from "./model/producto.js";
 
-export default class ProductManager {
+export default class ProductMongoDAO {
   async addProduct(product) {
     try {
       let result = await productoModel.create(product);
@@ -15,7 +15,6 @@ export default class ProductManager {
       const result = await productoModel.paginate(busqueda, options);
       return result;
     } catch (error) {
-      console.log("Error al cargar los productos", error);
       throw new Error("Error al obtener los productos");
     }
   }
