@@ -106,9 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify({ productId: productId }),
         })
-          .then((response) => response.text())
-          .then((data) => {
-            console.log(data);
+          .then((response) => {
+            if (!response.ok) {
+              window.location.href = "/unauthorized";
+            } else {
+              console.log("Solicitud exitosa");
+            }
           })
           .catch((error) => {
             console.error("Error al realizar la solicitud:", error);

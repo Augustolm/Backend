@@ -34,7 +34,6 @@ routerLogin.get("/login/profile", async (req, res) => {
     }
     const userDTO = new UserDTO(user);
 
-    const { first_name, last_name, email, age } = user;
     res.render(__dirname + "/views/profile", {
       datosUsuario: userDTO,
       isNewUser: req.session.nuevoUser,

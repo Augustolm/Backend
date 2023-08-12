@@ -2,11 +2,12 @@ import express from "express";
 import { engine } from "express-handlebars";
 import { createServer as createHttpServer } from "http";
 import path from "path";
-import routerProduct from "./Router/router.product.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import routerProduct from "./Router/router.product.js";
 import routerCars from "./Router/router.cars.js";
 import routerLogin from "./Router/router.login.js";
+import routerErrors from "./Router/router.erros.js";
 import fileStore from "session-file-store";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -87,6 +88,7 @@ app.use("", routerLogin);
 app.use("", routerGuitHub);
 app.use("", routerProduct);
 app.use("/api", routerCars);
+app.use("", routerErrors);
 
 // app.use((req, res, next) => {
 //   console.log("req.session", req.session, req.isAuthenticated());

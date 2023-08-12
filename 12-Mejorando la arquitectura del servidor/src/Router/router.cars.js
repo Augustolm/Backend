@@ -4,6 +4,7 @@ import { userModel } from "../daos/model/user.model.js";
 import CartController from "../controllers/cart.controller.js";
 import ProductController from "../controllers/product.controller.js";
 import userController from "../controllers/user.controller.js";
+import { authClient } from "../utils/authClient.rol.js";
 
 const routerCars = Router();
 
@@ -46,7 +47,7 @@ routerCars.get("/carrito", async (req, res) => {
   }
 });
 
-routerCars.post("/carrito/productos", async (req, res) => {
+routerCars.post("/carrito/productos", authClient, async (req, res) => {
   const productId = req.query.productId;
 
   const user = await userModel.findById(req.session.passport.user);
