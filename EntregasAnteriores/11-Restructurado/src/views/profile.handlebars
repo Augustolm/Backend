@@ -1,0 +1,32 @@
+<div
+  class="d-flex justify-content-center align-items-center"
+  style="height: 100vh;"
+>
+  <div>
+    {{#if datosUsuario}}
+      <div class="card text-center" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Bienvenido</h5>
+          {{#if isNewUser}}
+            <p class="card-text">Felicitaciones por crear tu cuenta con
+              nosotros.</p>
+          {{/if}}
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Usuario:
+              {{datosUsuario.first_name}}</li>
+            <li class="list-group-item">Apellido:
+              {{datosUsuario.last_name}}</li>
+            <li class="list-group-item">Email: {{datosUsuario.email}}</li>
+            <li class="list-group-item">Edad: {{datosUsuario.age}}</li>
+          </ul>
+          <a href="/" class="btn btn-primary">Continuar</a>
+        </div>
+      </div>
+    {{else}}
+      <div class="alert alert-danger" role="alert">
+        Error al cargar los datos.
+      </div>
+      <a href="/" class="btn btn-primary">Salir</a>
+    {{/if}}
+  </div>
+</div>
