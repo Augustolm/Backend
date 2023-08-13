@@ -59,4 +59,32 @@ export default class ProductMongoDAO {
       console.log(`Error al eliminar el producto con id: ${id}`, error);
     }
   }
+
+  async updateProductStock(id, updateProduct) {
+    try {
+      let result = await productoModel.updateMany(
+        { _id: id },
+        { $inc: updateProduct }
+      );
+      return result;
+    } catch (error) {
+      console.log(
+        `Error al actualizar el stock del producto con id: ${id}`,
+        error
+      );
+    }
+  }
+
+  async getProductsStock(id) {
+    try {
+      const result = await productoModel.findOne({ _id: id }, { stock: 1 });
+      return result;
+    } catch (error) {
+      console.log(
+        `Error al obtener el stock del producto con id: ${id}`,
+        error
+      );
+      throw error;
+    }
+  }
 }

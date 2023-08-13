@@ -98,4 +98,18 @@ export default class CartMongoDAO {
       console.log(`Error al eliminar el producto del carrito: ${error}`);
     }
   }
+
+  async deleteAllProductsCard(cardId, products = []) {
+    try {
+      const cart = await cartModel.findOne({ _id: cardId });
+      if (!cart) {
+        console.log(`No se encontró el carrito con ID: ${cardId}`);
+        return;
+      }
+      cart.products = products;
+      await cart.save();
+    } catch (error) {
+      console.log(`Error al eliminar los productos del carrito: ${error}`);
+    }
+  }
 }

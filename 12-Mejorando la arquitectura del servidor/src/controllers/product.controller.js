@@ -37,4 +37,17 @@ export default class ProductController {
     const result = await this.productoService.deleteProduct(id);
     return result;
   }
+
+  async updateProductStockController(id, updateProduct) {
+    const result = await this.productoService.updateProductStock(
+      id,
+      updateProduct
+    );
+    return result;
+  }
+
+  async getProductsStockController(id) {
+    const result = await this.productoService.getProductsStock(id);
+    return result;
+  }
 }

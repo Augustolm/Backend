@@ -34,4 +34,14 @@ export default class ProductService {
     const result = await this.productDAO.deleteProduct(id);
     return result;
   }
+
+  async updateProductStock(id, updateProduct) {
+    const result = await this.productDAO.updateProductStock(id, updateProduct);
+    return result;
+  }
+
+  async getProductsStock(id) {
+    const result = await this.productDAO.getProductsStock(id);
+    return result;
+  }
 }

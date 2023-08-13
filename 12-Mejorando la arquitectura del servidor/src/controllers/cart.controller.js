@@ -35,4 +35,12 @@ export default class CartController {
     );
     return result;
   }
+
+  async deleteAllProductsFromCartController(cardId, productId) {
+    const result = await this.cartService.deleteAllProductsFromCart(
+      cardId,
+      productId
+    );
+    return result;
+  }
 }

@@ -27,4 +27,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  const btnFinalizarCompra = document.getElementById("btn-finalizar-compra");
+
+  btnFinalizarCompra.addEventListener("click", function () {
+    // Suponiendo que tienes un valor para `cid` que deseas usar en la URL
+
+    const cid = uuidv4();
+    console.log("cid", cid);
+    const url = `/api/cartps/${cid}/purchase`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error en la petición: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Manejo de la respuesta exitosa
+        console.log("Compra realizada con éxito:", data);
+        // Aquí podrías mostrar un mensaje de éxito al usuario
+      })
+      .catch((error) => {
+        // Manejo de errores
+        console.error("Error al realizar la compra:", error);
+        // Aquí podrías mostrar un mensaje de error al usuario
+      });
+  });
 });

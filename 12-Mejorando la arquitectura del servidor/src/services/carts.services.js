@@ -29,7 +29,12 @@ export default class CartService {
   }
 
   async deleteProductFromCart(cardId, productId) {
-    const result = await this.CartDAO.deleteProductFromCart(cardId, productId);
+    const result = await this.CartDAO.deleteProductCard(cardId, productId);
+    return result;
+  }
+
+  async deleteAllProductsFromCart(cardId, productId) {
+    const result = await this.CartDAO.deleteAllProductsCard(cardId, productId);
     return result;
   }
 }
