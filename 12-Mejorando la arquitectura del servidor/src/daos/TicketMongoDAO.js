@@ -6,7 +6,7 @@ export default class TicketMongoDAO {
   }
 
   async getById(id) {
-    return await this.Ticket.findById(id);
+    return await this.Ticket.findOne({ code: id });
   }
 
   async createTicket(data) {

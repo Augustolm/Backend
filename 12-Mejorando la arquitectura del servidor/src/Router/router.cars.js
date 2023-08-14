@@ -7,6 +7,7 @@ import userController from "../controllers/user.controller.js";
 import { authClient } from "../utils/authClient.rol.js";
 import UserDTO from "../model/userDTO.js";
 import TicketController from "../controllers/ticket.controller.js";
+import path from "path";
 
 const routerCars = Router();
 
@@ -24,7 +25,7 @@ routerCars.get("/carrito", async (req, res) => {
     const userDTO = new UserDTO(resultUser);
 
     const cart = await cartController.getCartByIdController(resultUser.cart);
-    console.log("cart", cart);
+    console.log("cart aca encontro", cart);
     if (cart.products && cart.products.length > 0) {
       const productIds = cart.products?.map((item) => item.product);
 
@@ -91,17 +92,50 @@ routerCars.post("/cartps/:cid/purchase", authClient, async (req, res) => {
       products: carritoUser.products,
     });
 
-    console.log("ticket", ticket);
+    let productsToDelete = [];
+    if (ticket.productosSinStock && ticket.productosSinStock.length > 0) {
+      productsToDelete = ticket.productosSinStock;
+    }
+    // await cartController.deleteAllProductsFromCartController(
+    //   resultUser.cart,
+    //   productsToDelete
+    // );
 
-    await cartController.deleteAllProductsFromCartController(
-      resultUser.cart,
-      ticket
-    );
-
-    res.status(200).send("Compra realizada con éxito");
+    res.status(200).redirect(`/api/carrito/ticket?code=${ticket.code}`);
   } catch (error) {
     console.log("Error al realizar la compra", error);
     res.status(500).send("Ocurrió un error al realizar la compra");
+  }
+});
+
+routerCars.get("/carrito/ticket", async (req, res) => {
+  try {
+    const ticketCode = req.query.code;
+
+    const ticket = await ticketController.getTicketByIdController(
+      ticketCode.toString()
+    );
+
+    const cleanTicket = {
+      code: ticket.code,
+      purchase_datetime: ticket.purchase_datetime,
+      amount: ticket.amount,
+      purchaser: ticket.purchaser,
+      products: ticket.products,
+    };
+
+    if (!ticket) {
+      console.log("Ticket no encontrado");
+      return res.status(404).send("Ticket no encontrado");
+    }
+
+    console.log("proximo paso renderizar!", cleanTicket);
+    console.log("__dirname", __dirname);
+    const viewPath = path.join(__dirname, "views", "ticketcompra.handlebars");
+    res.render(viewPath, { ticket: cleanTicket });
+  } catch (error) {
+    console.log("Error al obtener el ticket", error);
+    res.status(500).send("Ocurrió un error al obtener el ticket");
   }
 });
 

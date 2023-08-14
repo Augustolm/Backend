@@ -44,20 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     })
       .then((response) => {
-        if (!response.ok) {
+        if (response.ok) {
+          console.log("Compra realizada con éxito");
+        } else {
           throw new Error(`Error en la petición: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        // Manejo de la respuesta exitosa
-        console.log("Compra realizada con éxito:", data);
-        // Aquí podrías mostrar un mensaje de éxito al usuario
       })
       .catch((error) => {
-        // Manejo de errores
         console.error("Error al realizar la compra:", error);
-        // Aquí podrías mostrar un mensaje de error al usuario
       });
   });
 });

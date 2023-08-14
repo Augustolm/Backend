@@ -13,6 +13,8 @@ export default class TicketController {
     const productosConStock = [];
     const productosSinStock = [];
 
+    let totalPrice = 0;
+
     const stockUpdatePromises = ticket.products.map(async (product) => {
       const productStock =
         await this.productController.getProductsStockController(
@@ -20,26 +22,23 @@ export default class TicketController {
         );
 
       console.log("Stock del producto", productStock);
-      // Verificar si hay suficiente stock antes de restar 1
+
       if (productStock.stock >= 1) {
         productosConStock.push(product);
+        totalPrice += product.price;
         return this.productController.updateProductStockController(
           product.product,
-          {
-            stock: -1,
-          }
+          { stock: -1 }
         );
       } else {
         productosSinStock.push(product);
-        return product; // Retornar el producto sin actualizar el stock
+        return product;
       }
     });
 
     try {
-      // Ejecutar todas las actualizaciones de stock en paralelo
       await Promise.all(stockUpdatePromises);
 
-      // Crear el ticket con los productos que tienen suficiente stock
       const result = await this.ticketService.createTicket({
         ...ticket,
         products: productosConStock,
@@ -47,15 +46,24 @@ export default class TicketController {
 
       console.log("Stocks actualizados y ticket creado correctamente");
 
-      // Si hay productos sin suficiente stock, retornar el array de productos
+      //!No tendria que pasar por este caso, Ej en mercadolibre no te deja comprar si no hay stock, o no te deja agregar mas productos de los que hay en stock en el carrito
       if (productosSinStock.length > 0) {
-        return productosSinStock;
+        const purchaserEmail = ticket.purchaser;
+        const ticketData = {
+          code: result.code,
+          totalPrice: totalPrice,
+          purchaser: purchaserEmail,
+          productosConStock: productosConStock,
+          productosSinStock: productosSinStock,
+        };
+
+        return ticketData;
       }
 
       return result;
     } catch (error) {
       console.error("Error en la creación del ticket:", error);
-      throw error; // Relanzar el error para manejarlo en niveles superiores
+      throw error;
     }
   }
 
