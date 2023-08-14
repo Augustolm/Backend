@@ -96,10 +96,10 @@ routerCars.post("/cartps/:cid/purchase", authClient, async (req, res) => {
     if (ticket.productosSinStock && ticket.productosSinStock.length > 0) {
       productsToDelete = ticket.productosSinStock;
     }
-    // await cartController.deleteAllProductsFromCartController(
-    //   resultUser.cart,
-    //   productsToDelete
-    // );
+    await cartController.deleteAllProductsFromCartController(
+      resultUser.cart,
+      productsToDelete
+    );
 
     res.status(200).redirect(`/api/carrito/ticket?code=${ticket.code}`);
   } catch (error) {
