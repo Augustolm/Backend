@@ -101,7 +101,7 @@ routerCars.post("/cartps/:cid/purchase", authClient, async (req, res) => {
       productsToDelete
     );
 
-    res.status(200).redirect(`/api/carrito/ticket?code=${ticket.code}`);
+    res.status(200).send("Compra realizada exitosamente");
   } catch (error) {
     console.log("Error al realizar la compra", error);
     res.status(500).send("Ocurrió un error al realizar la compra");

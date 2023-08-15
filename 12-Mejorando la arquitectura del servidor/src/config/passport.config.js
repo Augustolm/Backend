@@ -6,6 +6,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { cartModel } from "../daos/model/carts.model.js";
 import { PRIVATE_KEY, cookieExtractor } from "../utils/jwt.js";
+import { validateEmail } from "../utils/valdiateEmail.js";
 
 export const initializePassport = () => {
   passport.use(
@@ -93,6 +94,8 @@ export const initializePassport = () => {
             return done(null, false, { message: "El usuario ya existe" });
           }
 
+          const adminUSer = validateEmail(req.body.email);
+
           const newCart = await cartModel.create({
             products: [],
             timestamp: Date.now(),
@@ -106,7 +109,7 @@ export const initializePassport = () => {
             email: email,
             age: req.body.age,
             password: hashedPassword,
-            rol: "user",
+            rol: adminUSer ? "admin" : "user",
             cart: newCart._id,
           });
 

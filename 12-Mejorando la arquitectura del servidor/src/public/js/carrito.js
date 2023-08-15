@@ -31,13 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnFinalizarCompra = document.getElementById("btn-finalizar-compra");
 
   btnFinalizarCompra.addEventListener("click", function () {
-    // Suponiendo que tienes un valor para `cid` que deseas usar en la URL
-
     const cid = uuidv4();
     console.log("cid", cid);
-    const url = `/api/cartps/${cid}/purchase`;
+    const purchaseUrl = `/api/cartps/${cid}/purchase`;
+    const ticketUrl = `/api/carrito/ticket?code=${cid}`;
 
-    fetch(url, {
+    fetch(purchaseUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => {
         if (response.ok) {
           console.log("Compra realizada con éxito");
+          window.location.href = ticketUrl;
         } else {
           throw new Error(`Error en la petición: ${response.status}`);
         }

@@ -71,7 +71,7 @@ routerProduct.get("/", async (req, res) => {
 
 routerProduct.get("/cargarProductos", auth, async (req, res) => {
   try {
-    const { docs } = await productController.getProductsController(); // Llamar a la función para obtener los productos
+    const { docs } = await productController.getProductsController();
 
     const formattedProducts = docs.map((product) => {
       return {

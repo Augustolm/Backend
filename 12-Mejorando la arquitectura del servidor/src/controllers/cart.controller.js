@@ -1,4 +1,5 @@
 import CartService from "../services/carts.services.js";
+import ProductController from "./product.controller.js";
 
 export default class CartController {
   constructor() {
