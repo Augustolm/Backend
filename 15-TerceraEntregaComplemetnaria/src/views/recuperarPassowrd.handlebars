@@ -1,0 +1,118 @@
+<div class="container">
+  <div class="row vertical-center">
+    <div class="col-md-6">
+      <form id="passwordRecoveryForm">
+        <div class="mb-3">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Ingrese su email"
+            required
+          />
+        </div>
+        <!-- Agrega un elemento para mostrar el mensaje de correo inválido -->
+        <div
+          class="alert alert-danger"
+          id="invalidEmailMessage"
+          style="display: none;"
+        >
+          Correo inválido.
+        </div>
+        <div
+          class="alert alert-danger"
+          id="invalidEmailMessage2"
+          style="display: none;"
+        >
+          Codigo Expirado.
+        </div>
+        <div
+          class="alert alert-danger"
+          id="invalidCodeMessage3"
+          style="display: none;"
+        >
+          Codigo Incorrecto.
+        </div>
+
+        <div
+          class="alert alert-danger"
+          id="invalidEmailMessagePAsswordIncorrecto"
+          style="display: none;"
+        >
+          Contraseña incorrecta!.
+        </div>
+        <div
+          class="alert alert-success"
+          id="invalidEmailMessagePasswordCorrecto"
+          style="display: none;"
+        >
+          Contraseña Actualizada, favor de loguear nuevamente.
+        </div>
+        <div
+          class="alert alert-success"
+          id="messageContainer"
+          style="display: none;"
+        >
+          <p id="messageText"></p>
+        </div>
+        <div class="mb-3" id="codeInputContainer" style="display: none;">
+          <label for="code">Código de confirmación</label>
+          <input
+            type="text"
+            class="form-control"
+            id="textCode"
+            placeholder="Ingrese el código"
+          />
+        </div>
+
+        <div class="mb-3" id="passwordInputContainer" style="display: none;">
+          <label for="newPassword">Nueva Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="newPassword"
+            placeholder="Ingrese la nueva contraseña"
+            required
+          />
+        </div>
+        <div
+          class="mb-3"
+          id="confirmPasswordInputContainer"
+          style="display: none;"
+        >
+          <label for="confirmPassword">Confirmar Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            placeholder="Confirme la contraseña"
+            required
+          />
+        </div>
+        <button
+          type="button"
+          id="submitPasswordButton"
+          class="btn btn-primary"
+          style="display: none;"
+        >Enviar Contraseña</button>
+
+        <button
+          type="button"
+          id="sendButton"
+          class="btn btn-primary"
+        >Enviar</button>
+
+        <button
+          type="button"
+          id="sendButtonCode"
+          class="btn btn-primary"
+          style="display: none;"
+        >Enviar Code</button>
+        <a href="/" class="btn btn-danger ml-auto" id="cancelBtn">Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/rePassword.js"> </script>
