@@ -13,6 +13,7 @@ const productoSchema = new mongoose.Schema({
   code: { type: Number, required: true, unique: true },
   stock: { type: Number, required: true },
   timestamp: { type: Date, default: Date.now },
+  owner: { type: String, default: "admin" },
 });
 
 productoSchema.plugin(mongoosePaginate);

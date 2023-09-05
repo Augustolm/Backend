@@ -5,10 +5,12 @@ import { userModel } from "../daos/model/user.model.js";
 import ProductController from "../controllers/product.controller.js";
 import formatProduct from "../utils/productos.js";
 import path from "path";
+import userController from "../controllers/user.controller.js";
 
 const routerProduct = Router();
 
 let productController = new ProductController();
+let usersController = new userController();
 
 routerProduct.get("/", async (req, res) => {
   try {
@@ -80,6 +82,7 @@ routerProduct.get("/cargarProductos", auth, async (req, res) => {
         title: product.title,
         price: product.price,
         stock: product.stock,
+        owner: product.owner,
       };
     });
 
@@ -94,11 +97,22 @@ routerProduct.get("/cargarProductos", auth, async (req, res) => {
 });
 
 routerProduct.post("/api/addproductos", auth, async (req, res) => {
-  // console.log("req.body", req.body);
   req.logger.info("Request body:", { requestBody: req.body });
   try {
+    const userId = req.session.passport.user;
+
+    const user = await usersController.getUserByIdController(userId);
+
+    if (!user) {
+      return res.status(404).send({ message: "Usuario no encontrado" });
+    }
+
+    if (user.rol.toUpperCase() === "PREMIUM") {
+      req.body.owner = userId;
+    }
+
     const result = await productController.createProductController(req.body);
-    console.log("result", result);
+
     res.status(201).send(result);
   } catch (error) {
     res.status(500).send("Ocurrió un error al crear el producto");
@@ -109,11 +123,36 @@ routerProduct.delete("/api/borrarProduct", auth, async (req, res) => {
   req.logger.info("Producto id a eliminar:", { ProductoID: req.query.id });
 
   try {
-    const result = await productController.deleteProductController(
+    const userId = req.session.passport.user;
+    const user = await usersController.getUserByIdController(userId);
+    const product = await productController.getProductByIdController(
       req.query.id
     );
 
-    res.status(201).send(result);
+    if (!product) {
+      return res.status(404).send({ message: "Producto no encontrado" });
+    }
+
+    if (user.rol.toUpperCase() === "ADMIN") {
+      const result = await productController.deleteProductController(
+        req.query.id
+      );
+      return res.status(201).send(result);
+    }
+
+    if (
+      user.rol.toUpperCase() === "PREMIUM" &&
+      product.owner.toUpperCase() === userId.toUpperCase()
+    ) {
+      const result = await productController.deleteProductController(
+        req.query.id
+      );
+      return res.status(201).send(result);
+    }
+
+    return res
+      .status(401)
+      .send({ message: "No tienes permiso para eliminar este producto" });
   } catch (error) {
     res.status(500).send("Ocurrió un error al eliminar el producto");
   }

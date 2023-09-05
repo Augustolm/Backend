@@ -20,13 +20,6 @@ export default class ProductController {
   }
 
   async getProductsController(busqueda = {}, options) {
-    if (!options) {
-      throw CustomError.crearError({
-        name: "ProductNotFoundError",
-        mensaje: "options, no proporcionado",
-        codigo: EErrors.PRODUCT_NOT_FOUND,
-      });
-    }
     const result = await this.productoService.getProducts(
       (busqueda = {}),
       options

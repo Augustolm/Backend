@@ -20,7 +20,10 @@ export async function auth(req, res, next) {
     );
     console.log("rol", rol);
 
-    if (rol && rol.toUpperCase() === "ADMIN") {
+    if (
+      (rol && rol.toUpperCase() === "ADMIN") ||
+      rol.toUpperCase() === "PREMIUM"
+    ) {
       return next();
     } else {
       res.render(path.join(__dirname, "views/error"), {

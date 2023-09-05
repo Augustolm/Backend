@@ -55,6 +55,7 @@ form.addEventListener("submit", (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const deleteButtons = document.querySelectorAll(".btn-borrar-producto");
+  const PermisosAlert = document.getElementById("PermisosAlert");
   deleteButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
       const productId = event.currentTarget.dataset.productId;
@@ -69,8 +70,16 @@ document.addEventListener("DOMContentLoaded", () => {
           if (response.ok) {
             console.log("Producto eliminado correctamente");
             window.location.reload();
+          } else if (response.status === 401) {
+            console.log("No puedes eliminar el producto premium");
+            //cartel emergente!
+            PermisosAlert.style.display = "block";
+            setTimeout(() => {
+              PermisosAlert.style.display = "none";
+            }, 3000);
+            alert.error("No puedes eliminar el producto premium");
           } else {
-            throw new Error("Error al realizar la eliminación");
+            console.error("Error al eliminar el producto");
           }
         })
         .catch((error) => {

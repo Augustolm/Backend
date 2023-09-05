@@ -22,8 +22,6 @@ export default class UserMongoDAO {
 
   async resetPasswordUser(email, code) {
     try {
-      console.log("email", email);
-      console.log("code", code);
       const result = await this.User.findOneAndUpdate(
         { email },
         {
@@ -32,7 +30,6 @@ export default class UserMongoDAO {
           $inc: { __v: 1 },
         }
       );
-      console.log("result desde restePasswrodUser", result);
       return result;
     } catch (error) {
       console.log("error", error);
