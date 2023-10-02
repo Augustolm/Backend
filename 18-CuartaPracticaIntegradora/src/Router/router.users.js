@@ -37,7 +37,7 @@ routerUsers.post("/users/premium/:uid", async (req, res) => {
     const documentsExist = requiredDocuments.every((doc) =>
       filteredFiles.some((fileName) => fileName.includes(doc))
     );
-    console.log("documentsExist", documentsExist);
+
     if (user.rol === "user" && documentsExist) {
       user.rol = "premium";
     } else {
@@ -57,33 +57,6 @@ routerUsers.post("/users/premium/:uid", async (req, res) => {
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 });
-
-// routerUsers.get("/users/premium/:uid", async (req, res) => {
-//   const uid = req.params.uid;
-
-//   try {
-//     const user = await usersController.getUserByIdController(uid);
-
-//     if (!user) {
-//       return res.status(404).json({ message: "Usuario no encontrado" });
-//     }
-
-//     if (user.rol === "user") {
-//       user.rol = "premium";
-//     } else {
-//       user.rol = "user";
-//     }
-
-//     await usersController.updateUserController(uid, user);
-
-//     return res
-//       .status(200)
-//       .json({ message: "Rol de usuario actualizado con éxito", user });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: "Error interno del servidor" });
-//   }
-// });
 
 routerUsers.post(
   "/users/:uid/documents",
