@@ -74,6 +74,14 @@
     <button class="btn btn-primary">
         <a href="/cargarProductos" class="text-white text-decoration-none">Cargar Productos</a>
     </button>    
+    {{#if context.rol}}
+    {{#if (eq context.rol "Admin")}}
+   
+    <button class="btn btn-primary mt-3"  >
+        <a href="/api/gestion/users" class="text-white text-decoration-none">Gestionar Usuarios</a>
+    </button>
+    {{/if}}
+    {{/if}}
 </div>
 
 <div class="productos">

@@ -1,37 +1,46 @@
-<!-- FILEPATH: /D:/Estudios-ACA ESTA CODER/CODERHOUSE2022/Backend-CoderHouse/Backend/EntregaFinal/src/views/gestionUsuario.handlebars -->
-<table class="table table-bordered table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">Correo</th>
-      <th scope="col">Rol</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each userDTO}}
+<div
+  class="table-container"
+  style="max-height: 800px; overflow-y: auto; overflow-x: auto;"
+>
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
       <tr>
-        <td class="text-negro">{{this.first_name}}</td>
-        <td class="text-negro">{{this.last_name}}</td>
-        <td class="text-negro">{{this.email}}</td>
-        <td class="text-negro">{{this.role}}</td>
-        <td>
-          <button
-            class="btn btn-danger btn-delete"
-            data-user-id="{{this.id}}"
-            id="btnDelete{{this.id}}"
-          >Eliminar</button>
-
-          <button
-            class="btn btn-primary btn-rol"
-            data-user-id="{{this.id}}"
-            id="btnRol{{this.id}}"
-          >Asignar Rol</button>
-        </td>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Correo</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Acciones</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each userDTO}}
+        <tr>
+          <td class="text-negro">{{this.first_name}}</td>
+          <td class="text-negro">{{this.last_name}}</td>
+          <td class="text-negro">{{this.email}}</td>
+          <td class="text-negro">{{this.role}}</td>
+          <td>
+            <button
+              class="btn btn-danger btn-delete"
+              data-user-id="{{this.id}}"
+              id="btnDelete{{this.id}}"
+            >Eliminar</button>
+
+            <button
+              class="btn btn-primary btn-rol"
+              data-user-id="{{this.id}}"
+              id="btnRol{{this.id}}"
+            >Cambiar Rol</button>
+          </td>
+        </tr>
+      {{/each}}
+      <div
+        id="errorDiv"
+        class="alert alert-danger"
+        style="display: none;"
+      ></div>
+    </tbody>
+  </table>
+</div>
 
 <script src="/js/gestionUsuario.js"> </script>

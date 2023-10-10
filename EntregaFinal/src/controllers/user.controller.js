@@ -95,7 +95,7 @@ export default class userController {
       const dateNow = new Date();
       const diff = dateNow - date;
       const minutes = diff / (1000 * 60);
-      return minutes > 5;
+      return minutes > 5; //cambiar a 30 luego de la demostracion
     });
 
     return users;

@@ -18,7 +18,6 @@ export async function auth(req, res, next) {
     const { rol } = await usersController.getUserByIdController(
       req?.session?.passport?.user
     );
-    console.log("rol", rol);
 
     if (
       (rol && rol.toUpperCase() === "ADMIN") ||

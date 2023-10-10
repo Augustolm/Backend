@@ -7,6 +7,7 @@ import { __dirname } from "../app.js";
 import UserDTO from "../model/userDTO.js";
 import configMail from "../config/configMail.js";
 import { transport } from "../utils/configCorreo.js";
+import { auth } from "../utils/auth.rol.js";
 
 const routerUsers = Router();
 let usersController = new userController();
@@ -22,7 +23,19 @@ const requiredDocuments = [
 
 const filesInDocuments = fs.readdirSync(documentsPath);
 
-routerUsers.post("/users/premium/:uid", async (req, res) => {
+routerUsers.get("/gestion/users", auth, async (req, res) => {
+  try {
+    const users = await usersController.getUsersController();
+    const userDTO = users.map((user) => new UserDTO(user));
+
+    res.render(__dirname + "/views/gestionUsuario", { userDTO });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+routerUsers.put("/users/premium/:uid", async (req, res) => {
   const uid = req.params.uid;
 
   try {
@@ -50,6 +63,35 @@ routerUsers.post("/users/premium/:uid", async (req, res) => {
     }
 
     await usersController.updateUserController(uid, user);
+
+    return res
+      .status(200)
+      .json({ message: "Rol de usuario actualizado con éxito", user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+routerUsers.put("/users/rol/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await usersController.getUserByIdController(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    if (user.rol === "user") {
+      user.rol = "premium";
+    } else if (user.rol === "premium") {
+      user.rol = "admin";
+    } else if (user.rol === "admin") {
+      user.rol = "user";
+    }
+
+    await usersController.updateUserController(id, user);
 
     return res
       .status(200)
@@ -131,7 +173,7 @@ routerUsers.get("/users", async (req, res) => {
   }
 });
 
-routerUsers.get("/login/delete", async (req, res) => {
+routerUsers.delete("/login/delete", async (req, res) => {
   try {
     const users = await usersController.getUserLoginOnController();
     const errors = [];
@@ -155,7 +197,6 @@ routerUsers.get("/login/delete", async (req, res) => {
 
       transport.sendMail(mailOption, (error, info) => {
         if (error) {
-          console.log(error);
           errors.push({ user: user.email, error });
         }
 
@@ -177,17 +218,16 @@ routerUsers.get("/login/delete", async (req, res) => {
   }
 });
 
-routerUsers.get("/gestion/users", async (req, res) => {
+routerUsers.delete("/login/delete/:id", async (req, res) => {
   try {
-    const users = await usersController.getUsersController();
-    const userDTO = users.map((user) => new UserDTO(user));
-
-    console.log("userDTO", userDTO);
-
-    res.render(__dirname + "/views/gestionUsuario", { userDTO });
+    const { id } = req.params;
+    const result = await usersController.deleteUserController(id);
+    if (!result) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.status(200).send({ message: `Usuario eliminado` });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).send({ message: "Error al procesar la solicitud" });
   }
 });
 
