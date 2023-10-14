@@ -74,3 +74,34 @@ rolButtons.forEach((button) => {
       });
   });
 });
+
+document
+  .querySelector(".eliminarUsuarios")
+  .addEventListener("click", function () {
+    fetch("/login/delete", {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al eliminar usuarios");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(
+          `Usuarios eliminados correctamente. Lista de correos eliminados: ${data.correosEliminados.join(
+            ", "
+          )}`
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al eliminar usuarios");
+      });
+  });
+
+document
+  .getElementById("redirectTienda")
+  .addEventListener("click", function () {
+    window.location.href = "/";
+  });
