@@ -6,7 +6,6 @@ import TicketController from "../controllers/ticket.controller.js";
 import CartController from "../controllers/cart.controller.js";
 import ProductController from "../controllers/product.controller.js";
 import { v4 as uuidv4 } from "uuid";
-import configPayment from "../config/configPayment.js";
 
 const routerPayment = Router();
 
@@ -15,8 +14,6 @@ const usersController = new userController();
 let ticketController = new TicketController();
 let cartController = new CartController();
 let productController = new ProductController();
-
-const { BASE_URL } = configPayment;
 
 routerPayment.get("/payment-intens", async (req, res) => {
   const userId = req?.session?.passport?.user;
@@ -29,19 +26,22 @@ routerPayment.get("/payment-intens", async (req, res) => {
         productController.getProductByIdController(product.product)
       )
     );
+    console.log("products", products);
     req.session.amount = products.reduce(
       (total, product) => total + product.price,
       0
     );
+
     const session = await paymentService.createSession(
       products,
       userDTO.email,
-      `${BASE_URL}/success`,
-      `${BASE_URL}/cancel`
+      `${process.env.BASE_URL}/success`,
+      `${process.env.BASE_URL}/cancel`
     );
+
     res.send(session);
   } catch (error) {
-    res.status(500).send({ error: "Error al crear la sesión de pago" });
+    res.status(500).send({ error: "Error al crear la sesión de pago", error });
   }
 });
 

@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
 import { Command } from "commander";
 import { engine } from "express-handlebars";
 import { createServer as createHttpServer } from "http";
@@ -26,6 +25,8 @@ import { addLogger } from "./utils/logger.config.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import routerPayment from "./Router/router.payment.js";
+
+dotenv.config();
 
 const program = new Command();
 

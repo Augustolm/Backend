@@ -81,7 +81,7 @@ routerLogin.post("/login/logout", async (req, res) => {
     const userId = req?.session?.passport?.user;
     const user = await usersController.getUserByIdController(userId);
     const response = await usersController.logoutUserController(user.email);
-    console.log("response", response);
+
     req.session.destroy();
     res.status(200).redirect("/");
   } catch (error) {

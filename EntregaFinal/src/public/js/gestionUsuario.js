@@ -13,7 +13,6 @@ deleteButtons.forEach((button) => {
       },
     })
       .then((response) => {
-        console.log("response", response);
         if (response.ok) {
           console.log("Usuario eliminado exitosamente");
           window.location.replace("/api/gestion/users");
@@ -52,7 +51,6 @@ rolButtons.forEach((button) => {
       },
     })
       .then((response) => {
-        console.log("response", response);
         if (response.ok) {
           console.log("cambio de rol exitoso");
           window.location.replace("/api/gestion/users");

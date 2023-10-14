@@ -10,6 +10,12 @@ routerErrors.get("/unauthorized", (req, res) => {
   });
 });
 
+routerErrors.get("/usuarioNoLogueado", (req, res) => {
+  res.render(path.join(__dirname, "views/error"), {
+    errorMessage: "Acceso no autorizado Favor de loguear!!",
+  });
+});
+
 routerErrors.get("/faltaLogin", (req, res) => {
   res.render(path.join(__dirname, "views/error"), {
     errorMessage: "Realizar login ERROR 400",

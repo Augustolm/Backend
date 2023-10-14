@@ -6,8 +6,12 @@ const usersController = new userController();
 
 export async function authClient(req, res, next) {
   try {
+    if (!req?.session?.passport?.user) {
+      return res.redirect(405, "/usuarioNoLogueado");
+    }
+
     const { rol } = await usersController.getUserByIdController(
-      req.session.passport.user
+      req?.session?.passport?.user
     );
 
     if (
@@ -21,7 +25,7 @@ export async function authClient(req, res, next) {
     }
   } catch (error) {
     // Manejo de errores
-    console.error(error);
+    console.error("cae en catch", error);
     res.status(500).send("Error en el servidor");
   }
 }

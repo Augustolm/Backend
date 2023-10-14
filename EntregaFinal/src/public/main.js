@@ -107,7 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ productId: productId }),
         })
           .then((response) => {
-            if (!response.ok) {
+            if (response.status === 405) {
+              console.log("response", response);
+              window.location.href = "/usuarioNoLogueado";
+            } else if (response.status === 400) {
+              console.log("response", response);
               window.location.href = "/ProductoError";
             } else {
               console.log("Solicitud exitosa");

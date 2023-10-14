@@ -1,11 +1,15 @@
 import Stripe from "stripe";
-import configPayment from "../config/configPayment.js";
-
-const { APP_SECRET_PAYMENT } = configPayment;
-
 export default class PaymentService {
   constructor() {
-    this.stripe = new Stripe(APP_SECRET_PAYMENT);
+    this.initializeStripe();
+  }
+
+  async initializeStripe() {
+    while (!process.env.APP_SECRET_PAYMENT) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
+    this.stripe = new Stripe(process.env.APP_SECRET_PAYMENT);
   }
 
   async createPaymentIntent(amount) {
@@ -37,6 +41,8 @@ export default class PaymentService {
         success_url: success_url,
         cancel_url: cancel_url,
       });
+
+      console.log("session", session);
       return session;
     } catch (error) {
       console.log("Error al crear la sesión de pago", error);

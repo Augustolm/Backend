@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((response) => {
         if (response.ok) {
-          return response.json(); // Esto convierte la respuesta en JSON
+          return response.json();
         } else {
           throw new Error(`Error en la petición: ${response.status}`);
         }

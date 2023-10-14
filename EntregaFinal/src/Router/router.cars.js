@@ -145,7 +145,9 @@ routerCars.get("/ticket/:code", async (req, res) => {
 });
 
 routerCars.post("/carrito/productos", authClient, async (req, res) => {
+  console.log("entra aca?");
   const productId = req.query.productId;
+  console.log("req.session.passport.user", req.session.passport.user);
 
   const user = await userModel.findById(req.session.passport.user);
 
