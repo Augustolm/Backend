@@ -10,7 +10,10 @@ export async function authClient(req, res, next) {
       req.session.passport.user
     );
 
-    if (rol && rol.toUpperCase() === "USER") {
+    if (
+      (rol && rol.toUpperCase() === "USER") ||
+      rol.toUpperCase() === "PREMIUM"
+    ) {
       return next();
     } else {
       console.log("no autorizado");

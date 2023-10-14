@@ -1,11 +1,8 @@
-import config from "./config.js";
 import mongoose from "mongoose";
 
-const { MONGO_USER, MONGO_CLUSTER, MONGO_DB, MONGO_PASSWORD } = config;
+//export const connectionURL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}.fygmuos.mongodb.net/${process.env.MONGO_DB}`;
 
-export const connectionURL = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}.fygmuos.mongodb.net/${MONGO_DB}`;
-
-export const connectToDatabase = async () => {
+export const connectToDatabase = async (connectionURL) => {
   try {
     await mongoose.connect(connectionURL, {
       useNewUrlParser: true,

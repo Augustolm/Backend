@@ -31,7 +31,6 @@ routerCars.get("/carrito", async (req, res) => {
     const userDTO = new UserDTO(resultUser);
 
     const cart = await cartController.getCartByIdController(resultUser.cart);
-    console.log("cart", cart);
     if (cart.products && cart.products.length > 0) {
       const productIds = cart.products?.map((item) => item.product);
 
@@ -114,9 +113,11 @@ routerCars.post("/cartps/:cid/purchase", authClient, async (req, res) => {
   }
 });
 
-routerCars.get("/carrito/ticket", async (req, res) => {
+routerCars.get("/ticket/:code", async (req, res) => {
+  console.log("es string?", typeof req.params.code);
+  console.log("ingrese a ticket code", req.params.code);
   try {
-    const ticketCode = req.query.code;
+    const ticketCode = req.params.code;
 
     const ticket = await ticketController.getTicketByIdController(
       ticketCode.toString()
@@ -135,8 +136,6 @@ routerCars.get("/carrito/ticket", async (req, res) => {
       return res.status(404).send("Ticket no encontrado");
     }
 
-    console.log("proximo paso renderizar!", cleanTicket);
-    console.log("__dirname", __dirname);
     const viewPath = path.join(__dirname, "views", "ticketcompra.handlebars");
     res.render(viewPath, { ticket: cleanTicket });
   } catch (error) {

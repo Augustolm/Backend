@@ -6,6 +6,8 @@ import ProductController from "../controllers/product.controller.js";
 import formatProduct from "../utils/productos.js";
 import path from "path";
 import userController from "../controllers/user.controller.js";
+import configMail from "../config/configMail.js";
+import { transport } from "../utils/configCorreo.js";
 
 const routerProduct = Router();
 
@@ -98,7 +100,6 @@ routerProduct.get("/cargarProductos", auth, async (req, res) => {
 });
 
 routerProduct.post("/api/addproductos", auth, async (req, res) => {
-  console.log("pase por aca");
   req.logger.info("Request body:", { requestBody: req.body });
   try {
     const userId = req.session.passport.user;
@@ -112,10 +113,9 @@ routerProduct.post("/api/addproductos", auth, async (req, res) => {
     if (user.rol.toUpperCase() === "PREMIUM") {
       req.body.owner = userId;
     }
-    console.log("req.body", req.body);
 
     const result = await productController.createProductController(req.body);
-    console.log("producto agregado con existo", result);
+
     res.status(201).send(result);
   } catch (error) {
     res.status(500).send("Ocurrió un error al crear el producto");
@@ -123,7 +123,6 @@ routerProduct.post("/api/addproductos", auth, async (req, res) => {
 });
 
 routerProduct.delete("/api/borrarProduct", auth, async (req, res) => {
-  console.log("req.query.id", req.query.id);
   req.logger.info("Producto id a eliminar:", { ProductoID: req.query.id });
 
   try {
@@ -136,21 +135,34 @@ routerProduct.delete("/api/borrarProduct", auth, async (req, res) => {
     if (!product) {
       return res.status(404).send({ message: "Producto no encontrado" });
     }
-
     if (user.rol.toUpperCase() === "ADMIN") {
       const result = await productController.deleteProductController(
         req.query.id
       );
-      return res.status(201).send(result);
-    }
 
-    if (
-      user.rol.toUpperCase() === "PREMIUM" &&
-      product.owner.toUpperCase() === userId.toUpperCase()
-    ) {
-      const result = await productController.deleteProductController(
-        req.query.id
-      );
+      if (product.owner) {
+        const userProduct = await usersController.getUserByIdController(
+          product.owner
+        );
+        if (userProduct.rol.toUpperCase() === "PREMIUM") {
+          const mailOption = {
+            from: configMail.MAIL_USER,
+            to: userProduct.email,
+            subject: "Eliminacion de producto",
+            text: `Su producto con id: ${product._id} fue eliminado`,
+          };
+
+          transport.sendMail(mailOption, (error, info) => {
+            if (error) {
+              console.log(error);
+              return res
+                .status(500)
+                .send({ message: "Error al enviar el correo de notificacion" });
+            }
+          });
+        }
+      }
+
       return res.status(201).send(result);
     }
 

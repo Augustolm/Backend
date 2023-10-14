@@ -68,6 +68,7 @@ export default class TicketController {
 
         return ticketData;
       }
+      //eliminar productos del carrito al crear el ticket
 
       return result;
     } catch (error) {

@@ -32,26 +32,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnFinalizarCompra.addEventListener("click", function () {
     const cid = uuidv4();
-    console.log("cid", cid);
-    const purchaseUrl = `/api/cartps/${cid}/purchase`;
-    const ticketUrl = `/api/carrito/ticket?code=${cid}`;
+    const url = "/payment-intens";
 
-    fetch(purchaseUrl, {
-      method: "POST",
+    fetch(url, {
+      method: "get",
       headers: {
         "Content-Type": "application/json",
       },
+      timeout: 5000,
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Compra realizada con éxito");
-          window.location.href = ticketUrl;
+          return response.json(); // Esto convierte la respuesta en JSON
         } else {
           throw new Error(`Error en la petición: ${response.status}`);
         }
       })
+      .then((session) => {
+        console.log("redirige a mercad", session);
+        window.location.href = session.url;
+      })
       .catch((error) => {
-        console.error("Error al realizar la compra:", error);
+        console.error("Error:", error);
       });
   });
 });

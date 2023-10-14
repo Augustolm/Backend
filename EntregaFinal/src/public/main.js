@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
           .then((response) => {
             if (!response.ok) {
-              window.location.href = "/unauthorized";
+              window.location.href = "/ProductoError";
             } else {
               console.log("Solicitud exitosa");
             }

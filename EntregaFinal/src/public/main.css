@@ -234,3 +234,18 @@ body{
   padding: 10px 20px; /* Relleno interno */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra */
 }
+
+.custom-container {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.custom-container::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.custom-container {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}

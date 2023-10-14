@@ -64,8 +64,8 @@ export default class CartController {
     return result;
   }
 
-  async deleteAllProductsFromCartController(cardId, productId) {
-    if (!cardId || !productId) {
+  async deleteAllProductsFromCartController(cardId, productId = []) {
+    if (!cardId) {
       throw CustomError.crearError({
         name: "CartNotFoundError",
         mensaje: "cardId o productId, no proporcionado",

@@ -16,4 +16,10 @@ routerErrors.get("/faltaLogin", (req, res) => {
   });
 });
 
+routerErrors.get("/ProductoError", (req, res) => {
+  res.render(path.join(__dirname, "views/error"), {
+    errorMessage: "No puedes comprar un producto tuyo",
+  });
+});
+
 export default routerErrors;
