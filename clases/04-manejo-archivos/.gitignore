@@ -1,8 +1,0 @@
-# Ignorar la carpeta "node_modules"
-node_modules/
-
-# Ignorar archivos .log
-*.log
-
-# Ignorar todos los archivos que comiencen con "test_"
-test_*
