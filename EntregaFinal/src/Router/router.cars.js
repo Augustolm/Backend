@@ -114,8 +114,6 @@ routerCars.post("/cartps/:cid/purchase", authClient, async (req, res) => {
 });
 
 routerCars.get("/ticket/:code", async (req, res) => {
-  console.log("es string?", typeof req.params.code);
-  console.log("ingrese a ticket code", req.params.code);
   try {
     const ticketCode = req.params.code;
 
@@ -145,7 +143,6 @@ routerCars.get("/ticket/:code", async (req, res) => {
 });
 
 routerCars.post("/carrito/productos", authClient, async (req, res) => {
-  console.log("entra aca?");
   const productId = req.query.productId;
   console.log("req.session.passport.user", req.session.passport.user);
 

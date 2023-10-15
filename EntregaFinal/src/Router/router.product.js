@@ -7,7 +7,7 @@ import formatProduct from "../utils/productos.js";
 import path from "path";
 import userController from "../controllers/user.controller.js";
 import configMail from "../config/configMail.js";
-import { transport } from "../utils/configCorreo.js";
+import nodemailer from "nodemailer";
 
 const routerProduct = Router();
 
@@ -151,6 +151,15 @@ routerProduct.delete("/api/borrarProduct", auth, async (req, res) => {
             subject: "Eliminacion de producto",
             text: `Su producto con id: ${product._id} fue eliminado`,
           };
+
+          const transport = nodemailer.createTransport({
+            service: process.env.SERVICEMAIL,
+            port: 587,
+            auth: {
+              user: process.env.MAIL_USER,
+              pass: process.env.MAIL_PASSWORD,
+            },
+          });
 
           transport.sendMail(mailOption, (error, info) => {
             if (error) {

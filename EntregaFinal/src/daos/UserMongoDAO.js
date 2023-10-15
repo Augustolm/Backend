@@ -74,6 +74,9 @@ export default class UserMongoDAO {
             action: "login",
           },
         },
+        rol: {
+          $ne: "admin",
+        },
       });
 
       return users;

@@ -5,8 +5,8 @@ import { upload } from "../controllers/multer.controller.js";
 import userController from "../controllers/user.controller.js";
 import { __dirname } from "../app.js";
 import UserDTO from "../model/userDTO.js";
-import configMail from "../config/configMail.js";
-import { transport } from "../utils/configCorreo.js";
+import nodemailer from "nodemailer";
+
 import { auth } from "../utils/auth.rol.js";
 
 const routerUsers = Router();
@@ -173,21 +173,22 @@ routerUsers.get("/users", async (req, res) => {
   }
 });
 
-routerUsers.delete("/login/delete", async (req, res) => {
+routerUsers.delete("/login/deleteAllFortime", async (req, res) => {
   try {
     const users = await usersController.getUserLoginOnController();
+
     const errors = [];
     const correosEliminados = [];
 
     if (!users || users.length === 0) {
       return res
         .status(404)
-        .json({ message: "No hay usuarios conectados con limite de timepo" });
+        .send({ message: "No hay usuarios conectados con limite de timepo" });
     }
     for (const user of users) {
       correosEliminados.push(user.email);
       const mailOption = {
-        from: configMail.MAIL_USER,
+        from: process.env.MAIL_USER,
         to: user.email,
         subject: "Inactividad de cuenta",
         text: `
@@ -195,16 +196,25 @@ routerUsers.delete("/login/delete", async (req, res) => {
         `,
       };
 
+      const transport = nodemailer.createTransport({
+        service: process.env.SERVICEMAIL,
+        port: 587,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      });
+
       transport.sendMail(mailOption, (error, info) => {
         if (error) {
-          errors.push({ user: user.email, error });
-        }
-
-        if (!result) {
+          console.log("error", error);
           errors.push({ user: user.email, error });
         }
       });
-      const result = await usersController.deleteUserController(user._id);
+      // const result = await usersController.deleteUserController(user._id);
+      // if (!result) {
+      //   errors.push({ user: user.email, error });
+      // }
     }
     if (errors.length > 0) {
       return res
@@ -219,6 +229,7 @@ routerUsers.delete("/login/delete", async (req, res) => {
 });
 
 routerUsers.delete("/login/delete/:id", async (req, res) => {
+  console.log("pase por aca");
   try {
     const { id } = req.params;
     const result = await usersController.deleteUserController(id);

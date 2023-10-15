@@ -4,8 +4,8 @@ import passport from "passport";
 import UserDTO from "../model/userDTO.js";
 import userController from "../controllers/user.controller.js";
 import { generateRandomCode } from "../utils/generateCodingRestPassword.js";
-import { transport } from "../utils/configCorreo.js";
 import configMail from "../config/configMail.js";
+import nodemailer from "nodemailer";
 
 const routerLogin = Router();
 
@@ -129,6 +129,15 @@ routerLogin.post("/login/recuperarPasswordCheck", async (req, res) => {
       subject: "Recuperar contraseña",
       text: `Su codigo de recuperacion es: ${resetCode}`,
     };
+
+    const transport = nodemailer.createTransport({
+      service: process.env.SERVICEMAIL,
+      port: 587,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
+      },
+    });
 
     transport.sendMail(mailOption, (error, info) => {
       if (error) {

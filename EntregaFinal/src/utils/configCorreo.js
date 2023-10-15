@@ -1,13 +1,10 @@
 import nodemailer from "nodemailer";
-import configMail from "../config/configMail.js";
-
-const { SERVICEMAIL, MAIL_USER, MAIL_PASSWORD } = configMail;
 
 export const transport = nodemailer.createTransport({
-  service: SERVICEMAIL,
+  service: process.env.SERVICEMAIL,
   port: 587,
   auth: {
-    user: MAIL_USER,
-    pass: MAIL_PASSWORD,
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWORD,
   },
 });

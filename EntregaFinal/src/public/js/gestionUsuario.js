@@ -75,27 +75,33 @@ rolButtons.forEach((button) => {
 
 document
   .querySelector(".eliminarUsuarios")
-  .addEventListener("click", function () {
-    fetch("/login/delete", {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al eliminar usuarios");
-        }
-        return response.json();
-      })
-      .then((data) => {
+  .addEventListener("click", async function () {
+    try {
+      const response = await fetch("/api/login/deleteAllFortime", {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text(); // Obtener el mensaje de error como texto
+        alert(errorMessage);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data && data.correosEliminados) {
         alert(
           `Usuarios eliminados correctamente. Lista de correos eliminados: ${data.correosEliminados.join(
             ", "
           )}`
         );
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Error al eliminar usuarios");
-      });
+      } else {
+        throw new Error("No se pudo obtener la lista de correos eliminados");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   });
 
 document
