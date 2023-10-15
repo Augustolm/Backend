@@ -211,10 +211,10 @@ routerUsers.delete("/login/deleteAllFortime", async (req, res) => {
           errors.push({ user: user.email, error });
         }
       });
-      // const result = await usersController.deleteUserController(user._id);
-      // if (!result) {
-      //   errors.push({ user: user.email, error });
-      // }
+      const result = await usersController.deleteUserController(user._id);
+      if (!result) {
+        errors.push({ user: user.email, error });
+      }
     }
     if (errors.length > 0) {
       return res
