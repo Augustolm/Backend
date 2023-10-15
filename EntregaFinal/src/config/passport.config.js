@@ -15,7 +15,8 @@ export const initializePassport = () => {
       {
         clientID: "Iv1.8acbb31e21913be8",
         clientSecret: "be6affbb2e4cd93068a176f00568668aa3917352",
-        callbackURL: "http://localhost:8080/api/session/githubcallback",
+        callbackURL:
+          "https://backend-production-3528.up.railway.app/api/session/githubcallback",
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
